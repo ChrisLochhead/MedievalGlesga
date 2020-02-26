@@ -1,0 +1,1 @@
+Neil's Wares,default-helmet,second-helmet,default-chestplate,default-legs,default-weapon,default-offhand
