@@ -43,7 +43,8 @@ class Player {
         this.QuestList = quests;
         this.gameScene = gameScene;
 
-        this.questScript1 = ['one', 'two', 'three', 'four', 'five'];
+        this.questScripts = [['one', 'two', 'three', 'four', 'five'], ['2one', 'two', 'three', 'four', 'five'],
+            ['3one', 'two', 'three', 'four', 'five'], ['4one', 'two', 'three', 'four', 'five']];
 
         this.questCheckPoints = [5,5,5,5];
         this.questCurrentProgress = [0,0,0,0];
@@ -109,7 +110,7 @@ class Player {
         this.notificationBoxCloseButton = this.gameScene.add.sprite(600, 105, 'chatboxclosebutton', 1).setInteractive().setScrollFactor(0).setDepth(3)
             .setVisible(false).setName('notificationboxclosebutton');
 
-        this.notificationBoxText = this.gameScene.add.text(400, 300, " ").setVisible(false).setDepth(3).setColor("#00000").setScrollFactor(0);
+        this.notificationBoxText = this.gameScene.add.text(100, 100, " ").setVisible(false).setDepth(3).setColor("#00000").setScrollFactor(0);
 
         //Setup chatbox dialogue
         this.chatBoxText = this.gameScene.add.text(50, 450, 'debug text here debug text here debug text here debug text here debug text here debug text here debug text here debug text here', 1).setVisible(false).setScrollFactor(0).setColor('#00000').setDepth(1).setWordWrapWidth(700);
@@ -376,20 +377,24 @@ class Player {
     ActivateQuestBox(index) {
         this.notificationBoxText.setVisible(true);
 
-        if (index == 0)
-            this.notificationBoxText.text = " One Small Favour \n\n\n\n To begin this quest, speak to Gando \n\n on the high street.";
-        if (index == 1) {
-            this.notificationBoxText.text = " Get them Meds \n\n\n\n To begin this quest, speak to Gando \n\n near his house in the south-east. \n\n You must have completed \n\n 'One Small Favour'" +
-                " \n\n to begin this quest";
+        if (index == 0) {
+            this.notificationBoxText.text = "               One Small Favour \n\n\n\n To begin this quest, speak to Gando \n\n on the high street.";
         }
-        if (index == 2)
-            this.notificationBoxText.text = " The NyClaws \n\n To begin this quest, speak to Gando \n\n near his house. \n\n\ You must have completed 'Get them Meds' \n\n to begin this quest";
-        if (index == 3)
-            this.notificationBoxText.text = " Revenge \n\n To begin this quest, speak to Graham \n\n the villager near the Nyclaws hideout. \n\n You must have completed 'The Nyclaws' \n\n to begin this quest";
+            if (index == 1) {
+                this.notificationBoxText.text = "               Get them Meds \n\n\n\n To begin this quest, speak to Gando \n\n near his house in the south-east. \n\n You must have completed \n\n 'One Small Favour'" +
+                    " \n\n to begin this quest";
+            }
+            if (index == 2)
+                this.notificationBoxText.text = "               The NyClaws \n\n To begin this quest, speak to Gando \n\n near his house. \n\n\ You must have completed 'Get them Meds' \n\n to begin this quest";
+            if (index == 3)
+                this.notificationBoxText.text = "               Revenge \n\n To begin this quest, speak to Graham \n\n the villager near the Nyclaws hideout. \n\n You must have completed 'The Nyclaws' \n\n to begin this quest";
 
+            for (let i = 0; i < this.questCurrentProgress[index]; i++) {
+                this.notificationBoxText.text = this.questScripts[index][i];
+            }
     }
 
-    GetEquipmentIndex(itemName) {
+    GetEquipmentIndex(itemName){
         if (itemName == 'helmet')
             return 0;
         if (itemName == 'chestplate')
@@ -627,16 +632,6 @@ class Player {
 
     }
 
-    ShowQuestDialogue(index)
-    {
-        this.notificationBox.setVisible(true);
-        this.notificationBoxText.setVisible(true);
-        for(let i = 0; i < index; i++) {
-            this.notificationBoxText.text += this.questScript1[i] + '\n\n';
-        }
-    console.log("howdy doodily");
-        this.notificationBoxCloseButton.setVisible(true);
-    }
     Update(cursors){
 
         //Check for input from buttons

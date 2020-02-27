@@ -137,7 +137,7 @@ function create ()
 
                 if(button.name == "0")
                 {
-                    player1.ShowQuestDialogue(4);
+                    player1.ToggleNotificationBox(true, 0);
                 }
 
                 player1.CheckInput(pointer, button);
