@@ -1,5 +1,5 @@
 class NPC{
-    constructor(spr, rot, info, infoFork, gamescene, shopType, cbd, xr, yr, players, isranged) {
+    constructor(spr, rot, info, infoFork, gamescene, shopType, cbd, xr, yr, players, isranged, givesQuestInfo, questIndex, questPlace) {
         this.characterSprite = spr;
         this.characterSprite.parent = this;
 
@@ -10,6 +10,10 @@ class NPC{
 
         this.shopItems = [];
         this.ShopBackgroundCloseButton = null;
+
+        this.givesQuest = givesQuestInfo;
+        this.questIndex = questIndex;
+        this.questPlace = questPlace;
 
         this.canBeDamaged = cbd;
         this.isRanged = isranged;

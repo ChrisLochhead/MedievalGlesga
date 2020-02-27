@@ -43,6 +43,11 @@ class Player {
         this.QuestList = quests;
         this.gameScene = gameScene;
 
+        this.questScript1 = ['one', 'two', 'three', 'four', 'five'];
+
+        this.questCheckPoints = [5,5,5,5];
+        this.questCurrentProgress = [0,0,0,0];
+
         //For collision detection
         this.collisionPartner = null;
 
@@ -101,10 +106,10 @@ class Player {
         this.notificationBox.setScrollFactor(0);
         this.notificationBox.setVisible(false);
 
-        this.notificationBoxCloseButton = this.gameScene.add.sprite(600, 105, 'chatboxclosebutton', 1).setInteractive().setScrollFactor(0).setDepth(1)
+        this.notificationBoxCloseButton = this.gameScene.add.sprite(600, 105, 'chatboxclosebutton', 1).setInteractive().setScrollFactor(0).setDepth(3)
             .setVisible(false).setName('notificationboxclosebutton');
 
-        this.notificationBoxText = this.gameScene.add.text(400, 300, "Empty").setVisible(false).setDepth(1).setColor("#00000");//.setScrollFactor(0);
+        this.notificationBoxText = this.gameScene.add.text(400, 300, " ").setVisible(false).setDepth(3).setColor("#00000").setScrollFactor(0);
 
         //Setup chatbox dialogue
         this.chatBoxText = this.gameScene.add.text(50, 450, 'debug text here debug text here debug text here debug text here debug text here debug text here debug text here debug text here', 1).setVisible(false).setScrollFactor(0).setColor('#00000').setDepth(1).setWordWrapWidth(700);
@@ -455,6 +460,17 @@ class Player {
                 this.chatBoxContinueButton.setVisible(true);
             }
         } else if (this.collisionPartner.information.length <= index) {
+            if(this.collisionPartner.givesQuest = true)
+            {
+                this.questCurrentProgress[this.collisionPartner.questIndex] = this.collisionPartner.questPlace;
+                if(this.questCurrentProgress[this.collisionPartner.questIndex] == this.questCheckPoints[this.collisionPartner.questIndex])
+                {
+                    this.QuestList[this.collisionPartner.questIndex].setColor('#008000');
+                }else
+                {
+                    this.QuestList[this.collisionPartner.questIndex].setColor('#FFA500');
+                }
+            }
             this.DeactivateChat();
             this.collisionPartner = null;
         }
@@ -582,8 +598,6 @@ class Player {
         }
 
         if(this.characterSprite.body.touching.none) {
-            this.notificationBoxText.visible = false;
-            this.notificationBoxText.text = ' ';
             this.chatIndex = 0;
             this.chatBoxText.setVisible(false);
             this.chatBoxContinueButton.setVisible(false);
@@ -611,6 +625,17 @@ class Player {
         this.characterSprite.x = this.spawnPoint[0];
         this.characterSprite.y = this.spawnPoint[1];
 
+    }
+
+    ShowQuestDialogue(index)
+    {
+        this.notificationBox.setVisible(true);
+        this.notificationBoxText.setVisible(true);
+        for(let i = 0; i < index; i++) {
+            this.notificationBoxText.text += this.questScript1[i] + '\n\n';
+        }
+    console.log("howdy doodily");
+        this.notificationBoxCloseButton.setVisible(true);
     }
     Update(cursors){
 

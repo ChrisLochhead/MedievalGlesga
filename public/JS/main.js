@@ -72,7 +72,7 @@ function create ()
     let npcInfo = ['my nama jeff', 'whats your nama sama', 'I have a big banana',
         'you want to sampa?', 'options-2', 'yes', 'no', 'ai-Ok'];
     let npcInfoFork = ['great! ill see you later my hombre', 'that sucks brother rest in peace'];
-    npc1 = new NPC(this.physics.add.image(200,100, 'npc').setImmovable(true), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, false, 0, 0, null);
+    npc1 = new NPC(this.physics.add.image(200,100, 'npc').setImmovable(true), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, false, 0, 0, null, false, true, 0, 5);
     npc1.characterSprite.body.allowGravity = false;
     this.physics.add.collider(player1.characterSprite, npc1.characterSprite, function(){callfunc(npc1)});
 
@@ -133,6 +133,11 @@ function create ()
 
                 if (tempname[0] == "dialogue") {
                     player1.ActivateChat(player1.collisionPartner.informationFork, 0, true, tempname[1]);
+                }
+
+                if(button.name == "0")
+                {
+                    player1.ShowQuestDialogue(4);
                 }
 
                 player1.CheckInput(pointer, button);
