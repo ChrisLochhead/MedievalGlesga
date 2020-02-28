@@ -83,13 +83,13 @@ class Player {
         this.inventory = this.gameScene.add.sprite(885, 415, 'inventory');
         this.inventory.setScrollFactor(0);
 
-        this.inventoryToggle = this.gameScene.add.sprite(818, 256, 'inventorytoggle', 1).setInteractive().setDepth(1);
+        this.inventoryToggle = this.gameScene.add.sprite(819, 257, 'inventorytoggle', 1).setInteractive().setDepth(1);
         this.inventoryToggle.setScrollFactor(0);
         this.inventoryToggle.name = "inventorytoggle";
-        this.gearToggle = this.gameScene.add.sprite(884, 256, 'geartoggle', 1).setInteractive().setDepth(1);
+        this.gearToggle = this.gameScene.add.sprite(885, 257, 'geartoggle', 1).setInteractive().setDepth(1);
         this.gearToggle.setScrollFactor(0);
         this.gearToggle.name = "geartoggle";
-        this.questToggle = this.gameScene.add.sprite(951, 256, 'questtoggle', 1).setInteractive().setDepth(1);
+        this.questToggle = this.gameScene.add.sprite(951, 257, 'questtoggle', 1).setInteractive().setDepth(1);
         this.questToggle.setScrollFactor(0);
         this.questToggle.name = "questtoggle";
 
@@ -165,35 +165,49 @@ class Player {
         //Activate inventory
         if (index == 0) {
             this.inventory.setTexture('inventory');
-            if (this.currentFlickBookIndex == 1)
+            if (this.currentFlickBookIndex == 1){
                 this.ShowGear(false);
-            else if (this.currentFlickBookIndex == 2)
+                this.gearToggle.setVisible(true);
+            }
+
+            else if (this.currentFlickBookIndex == 2){
                 this.ShowQuests(false);
+                this.questToggle.setVisible(true);
+            }
 
             this.currentFlickBookIndex = 0;
             this.ShowInventory(true);
+            this.inventoryToggle.setVisible(false);
         }
         //Activate gear tab
         if (index == 1) {
             this.inventory.setTexture('gear');
-            if (this.currentFlickBookIndex == 0)
+            if (this.currentFlickBookIndex == 0){
                 this.ShowInventory(false);
-            else if (this.currentFlickBookIndex == 2)
+                this.inventoryToggle.setVisible(true);
+            }
+            else if (this.currentFlickBookIndex == 2){
                 this.ShowQuests(false);
+                this.questToggle.setVisible(true);
+            }
 
             this.ShowGear(true);
+            this.gearToggle.setVisible(false);
             this.currentFlickBookIndex = 1;
         }
         //Activate quest tab
         if (index == 2) {
             this.inventory.setTexture('quests');
-            if (this.currentFlickBookIndex == 0)
+            if (this.currentFlickBookIndex == 0){
                 this.ShowInventory(false);
-
-            if (this.currentFlickBookIndex == 1)
+                this.inventoryToggle.setVisible(true);
+            }
+            if (this.currentFlickBookIndex == 1){
                 this.ShowGear(false);
-
+                this.gearToggle.setVisible(true);
+            }
             this.ShowQuests(true);
+            this.questToggle.setVisible(false);
             this.currentFlickBookIndex = 2;
         }
     }

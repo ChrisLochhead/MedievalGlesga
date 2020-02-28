@@ -33,14 +33,14 @@ function LoadGameAssets(gameScene)
 }
 function LoadPlayerAssets(gameScene)
 {
-    //load inventory
-    gameScene.load.image('inventory', "img/Inventory.png");
-    gameScene.load.image('gear', "img/Gear.png");
-    gameScene.load.image('quests', "img/QuestList.png");
+    //load inventory, gear and quests UI
+    gameScene.load.image('inventory', "img/panel-inventory.png");
+    gameScene.load.image('gear', "img/panel-equipment.png");
+    gameScene.load.image('quests', "img/panel-quest.png");
 
-    gameScene.load.image('inventorytoggle', "img/InventoryToggleButton.png");
-    gameScene.load.image('geartoggle', "img/GearToggleButton.png");
-    gameScene.load.image('questtoggle', "img/QuestToggleButton.png");
+    gameScene.load.image('inventorytoggle', "img/desBtn-inventory.png");
+    gameScene.load.image('geartoggle', "img/desBtn-equipment.png");
+    gameScene.load.image('questtoggle', "img/desBtn-quests.png");
 
     //load chatbox and notifications
     gameScene.load.image('chatbox', "img/ChatBox.png");
