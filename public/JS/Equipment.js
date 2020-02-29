@@ -1,9 +1,18 @@
 class Equipment {
-    constructor(inventSprite, mgdef, medef, t) {
+    constructor(inventSprite, attk, mgdef, medef, hb, mb, t, sp, cp) {
         this.inventorySprite = inventSprite;
+        this.inventorySprite.parent = this;
+        //Bonuses
+        this.attackBonus = attk;
         this.mageDefence = mgdef;
         this.meleeDefence = medef;
+        this.healthBonus = hb;
+        this.manaBonus = mb;
         this.itemType = t;
+        this.shopPrice = sp;
+        this.characterPrice = cp;
+
+        this.itemPriceText = null;
     }
 }
 

@@ -140,6 +140,22 @@ function create ()
                     player1.ToggleNotificationBox(true, 0);
                 }
 
+                if(button.name == "save")
+                {
+                    player1.Save();
+                }
+                if(button.name == "load")
+                {
+                    player1.Load();
+                }
+                if(button.name == "gearbutton")
+                {
+                    if(!player1.gearStatShowing)
+                        player1.ToggleBonuses(true);
+                    else
+                        player1.ToggleBonuses(false);
+                }
+
                 player1.CheckInput(pointer, button);
 
             }

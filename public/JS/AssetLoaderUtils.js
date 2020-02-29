@@ -18,6 +18,7 @@ function LoadGameAssets(gameScene)
     gameScene.load.image('default-chestplate-body', "img/Default-Chestplate-Body.png");
     gameScene.load.image('default-offhand-body', "img/Shield-Body.png");
     gameScene.load.image('default-helmet-body', "img/Default-Helmet-Body.png");
+    gameScene.load.image('second-helmet-body', "img/Default-Helmet-Body.png");
 
     //load NPCs
     gameScene.load.image('npc', "img/NPC.png")
@@ -36,10 +37,12 @@ function LoadPlayerAssets(gameScene)
     //load inventory
     gameScene.load.image('inventory', "img/Inventory.png");
     gameScene.load.image('gear', "img/Gear.png");
+    gameScene.load.image('gearstats', "img/GearStats.png");
     gameScene.load.image('quests', "img/QuestList.png");
 
     gameScene.load.image('inventorytoggle', "img/InventoryToggleButton.png");
     gameScene.load.image('geartoggle', "img/GearToggleButton.png");
+    gameScene.load.image('gearbutton', "img/GearButton.png");
     gameScene.load.image('questtoggle', "img/QuestToggleButton.png");
 
     //load chatbox and notifications

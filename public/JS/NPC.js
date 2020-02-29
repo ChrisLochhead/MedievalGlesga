@@ -74,14 +74,23 @@ class NPC{
         this.ShopTitle = this.gameScene.add.text(300, 50, itemArray[0]).setDepth(1).setColor('#00000');
         //Add shop items
         let xpos =  0, ypos = 0;
-        for(let i = 1; i < itemArray.length; i++)
+        for(let i = 1; i < itemArray.length -7; i+=8)
         {
-            xpos = (i-1) % 4;
-            ypos = (i-1) / 4;
+            xpos = ((i-1)/8) % 4;
+            ypos = ((i-1)/8) / 4;
             ypos = parseInt(ypos.toString());
 
-            let tempEquipment = new Equipment(this.gameScene.add.image(75 + (xpos * 200), 125 + (ypos * 100), itemArray[i]).setInteractive().setDepth(1).setScrollFactor(0), 5, 5, 0);
+            let tempEquipment = new Equipment(this.gameScene.add.image(75 + (xpos * 200), 125 + (ypos * 100), itemArray[i]).setInteractive().setDepth(1).setScrollFactor(0),
+                itemArray[i+1],
+                itemArray[i+2],
+                itemArray[i+3],
+                itemArray[i+4],
+                itemArray[i+5],
+                itemArray[i+6],
+                itemArray[i+7], (itemArray[i+7])/2);
+
             tempEquipment.inventorySprite.name =  itemArray[i];
+            tempEquipment.itemPriceText = this.gameScene.add.text(75 + (xpos * 200), 135 + (ypos * 100), itemArray[i+7]).setVisible(false).setColor('#000000').setDepth(3);
             this.shopItems.push(tempEquipment);
 
         }
@@ -99,6 +108,7 @@ class NPC{
             for(let i = 0; i < this.shopItems.length; i++)
             {
                 this.shopItems[i].inventorySprite.setVisible(true);
+                this.shopItems[i].itemPriceText.setVisible(true);
             }
         }else
         {
@@ -109,6 +119,7 @@ class NPC{
             for(let i = 0; i < this.shopItems.length; i++)
             {
                 this.shopItems[i].inventorySprite.setVisible(false);
+                this.shopItems[i].itemPriceText.setVisible(false);
             }
         }
 

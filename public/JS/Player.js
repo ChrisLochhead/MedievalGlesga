@@ -1,8 +1,16 @@
 
 class Player {
-    constructor(spr, healthspr, neghealth, healthtxt, manaspr, negmana, manatxt, quests, gameScene, npc) {
+    constructor(spr, healthspr, neghealth, healthtxt, manaspr, negmana, manatxt, quests, gameScene) {
+
+        this.questBoxActive = false;
+
+        //bonuses
+        this.attackBonus = 0;
         this.meleeDefence = 0;
         this.mageDefence = 0;
+        this.healthBonus = 0;
+        this.manaBonus = 0;
+
         this.inventoryItems = [null, null, null,
             null, null, null,
             null, null, null,
@@ -76,12 +84,28 @@ class Player {
         //Get npcs
         this.npcs = null;
         this.enemies = null;
+
+        //Gear button
+        this.gearButton = null;
+        this.gearStatShowing = false;
+
+        //Money
+        this.money = 500;
+        this.moneyText = null;
     }
 
     InitialiseHUD() {
+
+        //Setup money
+        this.moneyText = this.gameScene.add.text(787.5, 225, 'Cash : ' + this.money).setDepth(3).setScrollFactor(0);
+
         //setup inventory
         this.inventory = this.gameScene.add.sprite(885, 415, 'inventory');
         this.inventory.setScrollFactor(0);
+
+        //Test save button
+        this.saveButton = this.gameScene.add.text(300, 400, 'save game').setInteractive().setDepth(3).setName('save').setScrollFactor(0);
+        this.loadButton = this.gameScene.add.text(500, 400, 'load button').setInteractive().setDepth(3).setName('load').setScrollFactor(0);
 
         this.inventoryToggle = this.gameScene.add.sprite(818, 256, 'inventorytoggle', 1).setInteractive().setDepth(1);
         this.inventoryToggle.setScrollFactor(0);
@@ -116,6 +140,15 @@ class Player {
         this.chatBoxText = this.gameScene.add.text(50, 450, 'debug text here debug text here debug text here debug text here debug text here debug text here debug text here debug text here', 1).setVisible(false).setScrollFactor(0).setColor('#00000').setDepth(1).setWordWrapWidth(700);
         this.chatBoxContinueButton = this.gameScene.add.text(300, 550, 'click here to continue', 1).setInteractive().setVisible(false).setDepth(1).setScrollFactor(0).setColor('#00000').setName('chatboxcontinuebutton');
 
+        //Gear stats
+        this.gearButton = this.gameScene.add.sprite(884.5, 550, 'gearbutton').setName('gearbutton').setDepth(1).setInteractive().setVisible(false);
+
+        this.attackBonusText = this.gameScene.add.text(810, 360, "Attack: " + this.attackBonus.toString()).setVisible(false).setDepth(3).setScrollFactor(0).setColor('#000000');
+        this.meleeDefenceText = this.gameScene.add.text(810, 390, "Melee Def: " + this.meleeDefence.toString()).setVisible(false).setDepth(3).setScrollFactor(0).setColor('#000000');
+        this.mageDefenceText = this.gameScene.add.text(810, 420, "Magic Def: " + this.mageDefence.toString()).setVisible(false).setDepth(3).setScrollFactor(0).setColor('#000000');
+        this.healthBonusText = this.gameScene.add.text(810, 450, "Health: " + this.healthBonus.toString()).setVisible(false).setDepth(3).setScrollFactor(0).setColor('#000000');
+        this.manaBonusText = this.gameScene.add.text(810, 480, "Mana: " + this.manaBonus.toString()).setVisible(false).setDepth(3).setScrollFactor(0).setColor('#000000');
+
     }
 
     InitialiseInventory() {
@@ -125,24 +158,29 @@ class Player {
         }
 
         //default inventory
-        this.AddItemToInventory('default-helmet', 0, 0, 3, 10, 0);
-        this.AddItemToInventory('second-helmet', 1, 0, 3, 10, 0);
-        this.AddItemToInventory('default-chestplate', 2, 0, 3, 10, 1);
-        this.AddItemToInventory('default-legs', 0, 1, 3, 10, 2);
-        this.AddItemToInventory('default-weapon', 1, 1, 3, 10, 3);
-        this.AddItemToInventory('default-offhand', 2, 1, 3, 10, 4);
-        this.AddItemToInventory('health-potion', 0, 2, 25, 0, 5);
-        this.AddItemToInventory('mana-potion', 1, 2, 0, 25, 6);
+        this.AddItemToInventory('default-helmet', 0, 0, 0, 1, 3, 0, 0, 0, 50, 25,true);
+        this.AddItemToInventory('second-helmet', 1, 0, 0, 2, 6, 3, 0, 0, 100, 50, true);
+        this.AddItemToInventory('default-chestplate', 2, 0, 0, 6, 2, 0, 0, 1, 125, 67.5, true);
+        this.AddItemToInventory('default-legs', 0, 1, 0, 5, 1, 0, 0, 2, 95, 47.5, true);
+        this.AddItemToInventory('default-weapon', 1, 1, 10, 1, 1, 0, 0, 4, 60, 30, true);
+        this.AddItemToInventory('default-offhand', 2, 1, 16, 0, 3, 0, 0, 3, 80, 40, true);
+        this.AddItemToInventory('health-potion', 0, 2, 0, 20, 0, 0, 0, 5, 20 , 10, true);
+        this.AddItemToInventory('mana-potion', 1, 2, 0, 0, 20, 0, 0, 6, 80, 40, true);
     }
 
-    //add initial items
-    AddItemToInventory(item, indexX, indexY, mageDef, melDef, equipType) {
+    //add items
+    AddItemToInventory(item, indexX, indexY, attk, mageDef, melDef, hb, mb, equipType, shopPrice, itemPrice, initial) {
         //Setup new item by its sprite
         let tmpSprite = gameScene.add.sprite(825 + (indexX * 60), 335 + (indexY * 65), item, 1).setInteractive();
         tmpSprite.setScrollFactor(0);
         tmpSprite.name = item.toString() + '-' + (indexX + (indexY * 3));
 
-        this.inventoryItems[indexX + (indexY * 3)] = new Equipment(tmpSprite, mageDef, melDef, equipType);
+        this.inventoryItems[indexX + (indexY * 3)] = new Equipment(tmpSprite, attk, mageDef, melDef, hb, mb, equipType, shopPrice, itemPrice);
+        if(initial == false) {
+            this.money -= shopPrice;
+            this.moneyText.text = "Cash : " + this.money.toString();
+        }
+
     }
 
     ToggleChatBox(isOpen) {
@@ -203,10 +241,12 @@ class Player {
             this.notificationBox.setVisible(true);
             this.ActivateQuestBox(notificationText);
             this.notificationBoxCloseButton.setVisible(true);
+            this.questBoxActive = true;
         } else {
             this.notificationBox.setVisible(false);
             this.notificationBoxText.text = ' ';
             this.notificationBoxCloseButton.setVisible(false);
+            this.questBoxActive = false;
         }
     }
 
@@ -236,6 +276,12 @@ class Player {
                 }
             }
         }
+        this.gearButton.setVisible(isShowing);
+        this.attackBonusText.setVisible(false);
+        this.meleeDefenceText.setVisible(false);
+        this.mageDefenceText.setVisible(false);
+        this.healthBonusText.setVisible(false);
+        this.manaBonusText.setVisible(false);
     }
 
     DestroyGear(index)
@@ -262,12 +308,28 @@ class Player {
             this.mainWeapon = null;
         }
     }
-    AddGear(index, itemName) {
+    UpdateBonuses(attk, mgdef, meldef, hb, mb)
+    {
+        this.attackBonus += attk;
+        this.mageDefence += mgdef;
+        this.meleeDefence += meldef;
+        this.healthBonus += hb;
+        this.manaBonus += mb;
+
+        this.healthBonusText.text = "Health: " + this.healthBonus.toString();
+        this.manaBonusText.text = "Mana: " + this.manaBonus.toString();
+        this.attackBonusText.text = "Attack: " + this.attackBonus.toString();
+        this.mageDefenceText.text = "Mage Def: " + this.mageDefence.toString();
+        this.meleeDefenceText.text = "Melee Def: " + this.meleeDefence.toString();
+
+    }
+    AddGear(index, item) {
 
         let isReplaced = false;
         let indexPosition;
-        indexPosition = itemName.split('-');
+        indexPosition = item.name.split('-');
         let intIndexPosition = parseInt(indexPosition[2].toString());
+        let e = item.parent;
 
         //Check if its a consumable that has been selected
         if (this.inventoryItems[intIndexPosition].itemType > 4) {
@@ -288,7 +350,9 @@ class Player {
                     tmpSprite.name = existingGearName + '-' + intIndexPosition;
 
                     this.inventoryItems[intIndexPosition] = null;
-                    this.inventoryItems[intIndexPosition] = new Equipment(tmpSprite);
+                    this.inventoryItems[intIndexPosition] = new Equipment(tmpSprite, e.attackBonus, e.mageDefence, e.meleeDefence, e.healthBonus, e.manaBonus, e.itemType, e.shopPrice, e.characterPrice);;
+                    this.UpdateBonuses(e.attackBonus, e.mageDefence, e.meleeDefence, e.healthBonus, e.manaBonus);
+                    this.inventoryItems[intIndexPosition].characterSprite = tmpSprite;
 
                     this.gearItems[index].inventorySprite.name = 'null';
                     if(index != 2)
@@ -296,7 +360,7 @@ class Player {
                     isReplaced = true;
                 }
             }
-            let equipNameArray = itemName.split('-');
+            let equipNameArray = item.name.split('-');
             let equipName = equipNameArray[0] + '-' + equipNameArray[1];
 
             //Find gear index
@@ -306,8 +370,9 @@ class Player {
             tmpSprite.setScrollFactor(0);
             tmpSprite.name = equipName.toString() + '-' + index;
 
-            this.gearItems[index] = new Equipment(tmpSprite);
-            this.gearItems[index].inventorySprite.name = itemName + '-' + index;
+            this.gearItems[index] = new Equipment(tmpSprite, e.attackBonus, e.mageDefence, e.meleeDefence, e.healthBonus, e.manaBonus, e.itemType, e.shopPrice, e.characterPrice);
+            this.UpdateBonuses(e.attackBonus, e.mageDefence, e.meleeDefence, e.healthBonus, e.manaBonus);
+            this.gearItems[index].inventorySprite.name = item.name + '-' + index;
             this.gearItems[index].inventorySprite.setScrollFactor(0);
             this.gearItems[index].inventorySprite.visible = false;
 
@@ -316,53 +381,56 @@ class Player {
             {
                 let helmBody = this.gameScene.physics.add.sprite(this.characterSprite.x, this.characterSprite.y, equipName + "-body").setDepth(1);
                 helmBody.rotation = this.characterSprite.rotation;
-                this.helmet = new Weapon(helmBody, 5,5, this.npcs, this.gameScene, false, null, this, this.enemies);
+                this.helmet = new Weapon(helmBody, e.mageDefence,e.meleeDefence, this.npcs, this.gameScene, false, null, this, this.enemies);
             }
             if(index == 1)
             {
                 let chestBody = this.gameScene.physics.add.sprite(this.characterSprite.x, this.characterSprite.y, equipName + "-body").setDepth(1);
                 chestBody.rotation = this.characterSprite.rotation;
-                this.chestplate = new Weapon(chestBody, 5,5, this.npcs, this.gameScene, false, null, this, this.enemies);
+                this.chestplate = new Weapon(chestBody, e.mageDefence,e.meleeDefence, this.npcs, this.gameScene, false, null, this, this.enemies);
             }
             if(index == 3)
             {
                 let shieldBody = this.gameScene.physics.add.sprite(this.characterSprite.x, this.characterSprite.y, equipName + "-body").setDepth(1);
                 shieldBody.rotation = this.characterSprite.rotation;
-                this.shield = new Weapon(shieldBody, 5,5, this.npcs, this.gameScene, true, 'fireball', this, this.enemies);
+                this.shield = new Weapon(shieldBody, e.mageDefence,e.meleeDefence, this.npcs, this.gameScene, true, 'fireball', this, this.enemies);
             }
             if(index == 4)
             {
                 let weaponBody = this.gameScene.physics.add.sprite(this.characterSprite.x, this.characterSprite.y, equipName + "-body");
                 weaponBody.rotation = this.characterSprite.rotation;
-                this.mainWeapon = new Weapon(weaponBody, 5,5, this.npcs, this.gameScene, false, null, this.enemies);
+                this.mainWeapon = new Weapon(weaponBody, e.mageDefence,e.meleeDefence, this.npcs, this.gameScene, false, null, this.enemies);
             }
 
             if (!isReplaced) {
-                this.inventoryItems[intIndexPosition].inventorySprite.name = 'null';
-                this.inventoryItems[intIndexPosition].inventorySprite.visible = false;
+                this.inventoryItems[intIndexPosition].inventorySprite.destroy();
+                delete this.inventoryItems[intIndexPosition];
             }
         }
     }
 
-    RemoveGear(index, itemName) {
+    RemoveGear(index, item) {
         let successfullyRemoved = false;
+        let e = item.parent;
         for (let i = 0; i < player1.inventoryItems.length; i++) {
             if (this.inventoryItems[i].inventorySprite.name == 'null') {
 
                 let xPos = i % 3;
                 let yPos = i / 3;
                 yPos = parseInt(yPos);
-                let itemNameArray = itemName.split('-');
+                let itemNameArray = item.name.split('-');
                 let itemNameCombined = itemNameArray[0] + '-' + itemNameArray[1];
 
                 let tmpSprite = this.gameScene.add.sprite(825 + (xPos * 60), 335 + (yPos * 65), itemNameCombined, 1).setInteractive();
                 tmpSprite.setScrollFactor(0);
                 tmpSprite.name = itemNameCombined.toString() + '-' + i;
 
-                this.inventoryItems[i] = new Equipment(tmpSprite);
+                this.inventoryItems[i] = new Equipment(tmpSprite, e.attackBonus, e.mageDefence, e.meleeDefence, e.healthBonus, e.manaBonus, e.itemType, e.shopPrice, e.characterPrice);;
+                this.UpdateBonuses(-e.attackBonus, -e.mageDefence, -e.meleeDefence, -e.healthBonus, -e.manaBonus);
                 this.inventoryItems[i].inventorySprite.visible = false;
 
                 this.gearItems[index].inventorySprite.name = 'null';
+                delete this.gearItems[index];
                 successfullyRemoved = true;
 
                 if(index != 2) {
@@ -394,16 +462,91 @@ class Player {
             }
     }
 
+    Save()
+    {
+        let saveObject = {
+            //Stats
+            health: this.health,
+            mana: this.mana,
+            //Position
+            posX: this.characterSprite.x,
+            posY: this.characterSprite.y,
+            //Quest progress
+            questProgress: this.questCurrentProgress,
+            //Inventory
+            inventory: this.inventoryItems,
+            //Gear tab
+            gear: this.gearItems,
+            //Cash
+            money: this.money
+        };
+        window.localStorage.setItem('gamesave', JSON.stringify(saveObject));
+    }
+
+    Load()
+    {
+        let m = JSON.parse(window.localStorage.getItem('gamesave'));
+
+        //Apply to health and mana
+        this.health = m.health;
+        this.healthbarNegative.setCrop(0, 0, ((100 - this.health) / 100) * 200, 32);
+        this.healthbarText.text = m.health;
+        this.mana = m.mana;
+        this.manabarNegative.setCrop(0, 0, ((100 - this.mana) / 100) * 200, 32);
+        this.manabartext.text = m.mana;
+
+        //Assign character position
+        this.characterSprite.x = m.posX;
+        this.characterSprite.y = m.posY;
+
+        //Apply quest progress
+        this.questCurrentProgress = m.questProgress;
+
+        for(let i = 0; i < this.questCheckPoints.length; i++) {
+            if (this.questCurrentProgress[i] > 0)
+                this.QuestList[i].setColor('#FFA500');
+            if (this.questCurrentProgress[i] === this.questCheckPoints[i])
+                this.QuestList[i].setColor('#008000');
+        }
+
+        //Inventory and gear reallocation
+        for(let i = 0; i < this.inventoryItems.length; i++)
+        {
+            if(this.inventoryItems[i] != null) {
+                this.inventoryItems[i].inventorySprite.destroy();
+                delete this.inventoryItems[i];
+            }
+        }
+        this.inventoryItems = m.inventory;
+
+        for(let i = 0; i < this.inventoryItems.length; i++)
+        {
+            if(this.inventoryItems[i] != null)
+            {
+                let name = this.inventoryItems[i].inventorySprite.name.split('-');
+                let temp = this.gameScene.add.sprite(this.inventoryItems[i].inventorySprite.x, this.inventoryItems[i].inventorySprite.y, name[0] + '-' + name[1],
+                    1).setInteractive().setDepth(1).setScrollFactor(0).setName(this.inventoryItems[i].inventorySprite.name);
+                temp.parent = this.inventoryItems[i];
+                this.inventoryItems[i].inventorySprite = temp;
+            }
+        }
+        this.gearItems = m.gear;
+
+        //Money
+        this.money = m.money;
+        this.moneyText.text = "Cash: " + this.money;
+    }
+
     GetEquipmentIndex(itemName){
         if (itemName == 'helmet')
             return 0;
-        if (itemName == 'chestplate')
+        if (itemName === 'chestplate')
             return 1;
-        if (itemName == "legs")
+        if (itemName === "legs")
             return 2;
-        if (itemName == 'offhand')
+        if (itemName === 'offhand')
             return 3;
-        if (itemName == 'weapon')
+        if (itemName === 'weapon')
             return 4;
     }
 
@@ -437,8 +580,8 @@ class Player {
         this.manabarNegative.setCrop(0, 0, ((100 - this.mana) / 100) * 200, 32);
 
         //Remove the element from inventory
-        this.inventoryItems[index].inventorySprite.name = 'null';
-        this.inventoryItems[index].inventorySprite.visible = false;
+        this.inventoryItems[index].inventorySprite.destroy();
+        delete this.inventoryItems[index];
     }
 
     ClearCollisionUI() {
@@ -508,6 +651,67 @@ class Player {
         this.chatBoxContinueButton.setVisible(false);
     }
 
+    ToggleBonuses(turnOn) {
+        if (turnOn) {
+            this.attackBonus = 0;
+            this.mageDefence = 0;
+            this.meleeDefence = 0;
+            this.healthBonus = 0;
+            this.manaBonus = 0;
+            for (let i = 0; i < this.gearItems.length; i++) {
+                if (this.gearItems[i] != null) {
+                    if (this.gearItems[i].name != "null") {
+                        this.attackBonus += this.gearItems[i].attackBonus;
+                        this.mageDefence += this.gearItems[i].mageDefence;
+                        this.meleeDefence += this.gearItems[i].meleeDefence;
+                        this.healthBonus += this.gearItems[i].healthBonus;
+                        this.manaBonus += this.gearItems[i].manaBonus;
+
+                    }
+                }
+            }
+
+            this.inventory.setTexture('gearstats');
+
+            this.healthBonusText.text = "Health: " + this.healthBonus.toString();
+            this.manaBonusText.text = "Mana: " + this.manaBonus.toString();
+            this.attackBonusText.text = "Attack: " + this.attackBonus.toString();
+            this.mageDefenceText.text = "Mage Def: " + this.mageDefence.toString();
+            this.meleeDefenceText.text = "Melee Def: " + this.meleeDefence.toString();
+
+            this.healthBonusText.setVisible(true);
+            this.manaBonusText.setVisible(true);
+            this.attackBonusText.setVisible(true);
+            this.mageDefenceText.setVisible(true);
+            this.meleeDefenceText.setVisible(true);
+
+            for(let i = 0; i < this.gearItems.length; i++)
+            {
+                if(this.gearItems[i] != null){
+                        this.gearItems[i].inventorySprite.setVisible(false);
+                }
+            }
+            this.gearStatShowing = true;
+        }else
+        {
+            for(let i = 0; i < this.gearItems.length; i++)
+            {
+                if(this.gearItems[i]) {
+                    this.gearItems[i].inventorySprite.setVisible(true);
+
+                }
+            }
+
+            this.healthBonusText.setVisible(false);
+            this.manaBonusText.setVisible(false);
+            this.attackBonusText.setVisible(false);
+            this.mageDefenceText.setVisible(false);
+            this.meleeDefenceText.setVisible(false);
+            this.inventory.setTexture('gear');
+            this.gearStatShowing = false;
+        }
+    }
+
     FindEmptyInventorySpace() {
         for (let i = 0; i < 12; i++) {
             if (this.inventoryItems[i] === null)
@@ -530,25 +734,32 @@ class Player {
                     if (button === this.collisionPartner.shopItems[i].inventorySprite) {
                         console.log("its item number: " + i);
                         let emptySpace = this.FindEmptyInventorySpace();
-                        if (emptySpace != -1 && gearadded == false) {
+                        if (emptySpace != -1 && gearadded == false && this.money >= this.collisionPartner.shopItems[i].shopPrice) {
                             this.AddItemToInventory(this.collisionPartner.shopItems[i].inventorySprite.name, parseInt(emptySpace % 3), parseInt(emptySpace / 3),
-                                this.collisionPartner.shopItems[i].mageDefence, this.collisionPartner.shopItems[i].meleeDefence, this.collisionPartner.shopItems[i].type);
+                                this.collisionPartner.shopItems[i].attackBonus,
+                                this.collisionPartner.shopItems[i].mageDefence, this.collisionPartner.shopItems[i].meleeDefence,
+                                this.collisionPartner.shopItems[i].healthBonus, this.collisionPartner.shopItems[i].manaBonus,
+                                this.collisionPartner.shopItems[i].type,
+                                this.collisionPartner.shopItems[i].shopPrice, this.collisionPartner.shopItems[i].shopPrice/2, false);
                             gearadded = true;
                         }
                     }
                 }
             }
         }
+
+        if(gearadded)
+            return;
         let tempname = button.name.split('-');
         if (!this.collisionPartner && tempname[0] == "default" || tempname[0] == "second" ||tempname[0] ==  "mana" ||tempname[0] ==  "health") {
             if (this.currentFlickBookIndex == 0) {
                 //Equip item
-                this.AddGear(this.GetEquipmentIndex(tempname[1]), button.name);
+                this.AddGear(this.GetEquipmentIndex(tempname[1]), button);
                 //Destroy item still in inventory
                 button.destroy();
             } else if (this.currentFlickBookIndex == 1) {
                 //Un-equip item
-                this.RemoveGear(this.GetEquipmentIndex(tempname[1]), button.name);
+                this.RemoveGear(this.GetEquipmentIndex(tempname[1]), button);
                 //Destroy instance in the gear tab
                 button.destroy();
             } else if (this.currentFlickBookIndex == 2) {
@@ -711,6 +922,9 @@ class Player {
 
         if(this.shield != null)
             this.shield.Update();
+
+        if(this.collisionPartner == null && this.questBoxActive === false)
+            this.ClearCollisionUI();
 
     }
 
