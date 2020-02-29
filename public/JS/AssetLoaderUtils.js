@@ -43,9 +43,9 @@ function LoadPlayerAssets(gameScene)
     gameScene.load.image('questtoggle', "img/desBtn-quests.png");
 
     //load chatbox and notifications
-    gameScene.load.image('chatbox', "img/ChatBox.png");
-    gameScene.load.image('chatboxclosebutton', "img/ChatBox-CloseButton.png");
-    gameScene.load.image('chatboxclosed', "img/ChatBox-Closed.png");
+    gameScene.load.image('chatbox', "img/chatBox-Open.png");
+    gameScene.load.image('chatboxclosebutton', "img/chatBox-MinButton.png");
+    gameScene.load.image('chatboxclosed', "img/chatBox-Closed.png");
 
     //For notifications and quest dialogues
     gameScene.load.image('notificationbox', "img/NotificationBox.png");

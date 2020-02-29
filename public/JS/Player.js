@@ -98,7 +98,7 @@ class Player {
         this.chatbox.name = "chatbox";
         this.chatbox.setScrollFactor(0);
 
-        this.chatboxCloseButton = this.gameScene.add.sprite(732, 432, 'chatboxclosebutton', 1).setInteractive().setDepth(1);
+        this.chatboxCloseButton = this.gameScene.add.sprite(737, 421, 'chatboxclosebutton', 1).setInteractive().setDepth(1);
         this.chatboxCloseButton.name = "chatboxclosebutton";
         this.chatboxCloseButton.setScrollFactor(0);
 
@@ -151,12 +151,12 @@ class Player {
             this.chatbox.input.enabled = false;
             this.chatboxCloseButton.input.enabled = true;
             this.chatboxCloseButton.visible = true;
-            this.chatbox.y -= 79;
+            this.chatbox.y -= 70;
         } else {
             this.chatboxCloseButton.input.enabled = false;
             this.chatboxCloseButton.visible = false;
             this.chatbox.setTexture('chatboxclosed');
-            this.chatbox.y += 79;
+            this.chatbox.y += 70;
             this.chatbox.setInteractive();
         }
     }
