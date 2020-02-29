@@ -1,5 +1,5 @@
 class NPC{
-    constructor(spr, rot, info, infoFork, gamescene, shopType, cbd, xr, yr, players, isranged, givesQuestInfo, questIndex, questPlace) {
+    constructor(spr, rot, info, infoFork, gamescene, shopType, cbd, xr, yr, players, isranged, givesQuestInfo, questIndex, questPlace, cashdrop) {
         this.characterSprite = spr;
         this.characterSprite.parent = this;
 
@@ -7,6 +7,8 @@ class NPC{
         this.information = info;
         this.informationFork = infoFork;
         this.gameScene = gamescene;
+
+        this.cashDrop = cashdrop;
 
         this.shopItems = [];
         this.ShopBackgroundCloseButton = null;
@@ -133,28 +135,10 @@ class NPC{
     }
 
     Between(x, min, max, dir) {
-        //if(x >= min && x <= max)
-        //    return true;
-        //moving left: -x
-        if(dir == 1) {
-            if (this.characterSprite.x < this.destination[0])
-                return true;
-        }
-        //moving right: x
-        if(dir == 2) {
-            if (this.characterSprite.x > this.destination[0])
-                return true;
-        }
-        //moving up : -y
-        if(dir == 3) {
-            if (this.characterSprite.y < this.destination[1])
-                return true;
-        }
-        //moving down : y
-        if(dir == 4) {
-            if (this.characterSprite.y > this.destination[1])
-                return true;
-        }
+        if(dir == 1) { if (this.characterSprite.x < this.destination[0]) return true;}
+        if(dir == 2) { if (this.characterSprite.x > this.destination[0]) return true;}
+        if(dir == 3) { if (this.characterSprite.y < this.destination[1]) return true;}
+        if(dir == 4) { if (this.characterSprite.y > this.destination[1]) return true;}
         return false;
     }
 
@@ -163,59 +147,52 @@ class NPC{
         if(self.parent.attackTimer <= 0.0) {
             opponent.parent.TakeDamage(3);
             self.parent.attackTimer = 10.0;
-            if(opponent.parent.health < 0.0)
-                opponent.parent.health = 0.0;
-            if(opponent.parent.health == 0.0)
-                opponent.parent.Destruct();
+            if(opponent.parent.health < 0.0) opponent.parent.health = 0.0;
+            if(opponent.parent.health == 0.0) opponent.parent.Destruct();
         }
     }
 
     CheckFacingEnemy()
     {   //left or right
         if(this.shootDirection == 1 || this.shootDirection == 2) {
-            if (this.target.characterSprite.y < this.characterSprite.y + 30 && this.target.characterSprite.y > this.characterSprite.y - 30)
-                return true;
+            if (this.target.characterSprite.y < this.characterSprite.y + 30 && this.target.characterSprite.y > this.characterSprite.y - 30) return true;
         }
-
         //up or down
         if(this.shootDirection == 3 || this.shootDirection == 4) {
-            if (this.target.characterSprite.x < this.characterSprite.x + 30 && this.target.characterSprite.x > this.characterSprite.x - 30)
-                return true;
+            if (this.target.characterSprite.x < this.characterSprite.x + 30 && this.target.characterSprite.x > this.characterSprite.x - 30) return true;
         }
-
         return false;
     }
-    Update()
+
+    Move(rot, velx, vely)
     {
-        for(let i = 0; i < this.projectiles.length; i++)
-        {
-            if(this.projectiles[i] != null)
+        this.characterSprite.rotation = rot;
+        if(velx != 0) this.characterSprite.setVelocityX(velx);
+        if(vely != 0) this.characterSprite.setVelocityY(vely);
+    }
+    Update() {
+        for (let i = 0; i < this.projectiles.length; i++)
+            if (this.projectiles[i] != null) {
                 this.projectiles[i].Update();
-        }
-        if(this.isAlive) {
+            }
+
+        if (this.isAlive) {
             //Melee attack timer
-            if (this.attackTimer != 0.0)
-                this.attackTimer -= 0.1;
-            if (this.attackTimer < 0.0)
-                this.attackTimer = 0.0;
+            if (this.attackTimer != 0.0) this.attackTimer -= 0.1;
+            if (this.attackTimer < 0.0) this.attackTimer = 0.0;
 
             //Ranged attack timer
-            if (this.rangedSpeed != 0.0)
-                this.rangedSpeed -= 0.1;
-            if (this.rangedSpeed < 0.0)
-                this.rangedSpeed = 0.0;
+            if (this.rangedSpeed != 0.0) this.rangedSpeed -= 0.1;
+            if (this.rangedSpeed < 0.0) this.rangedSpeed = 0.0;
 
-            if (this.canBeDamaged) {
-                if (this.isDamaged) {
-                    this.damageTimer -= 0.01;
-                    this.characterSprite.setTint('0xff0000', '0xff0000', '0xff0000', '0xff0000');
-                }
-
-                if (this.damageTimer <= 0.0) {
-                    this.damageTimer = 0.25;
-                    this.isDamaged = false;
-                    this.characterSprite.clearTint();
-                }
+            if (this.canBeDamaged && this.isDamaged) {
+                this.damageTimer -= 0.01;
+                this.characterSprite.setTint('0xff0000', '0xff0000', '0xff0000', '0xff0000');
+            }
+            if (this.damageTimer <= 0.0) {
+                this.damageTimer = 0.25;
+                this.isDamaged = false;
+                this.characterSprite.clearTint();
             }
 
             //If character can move
@@ -223,55 +200,38 @@ class NPC{
                 //If a direction and distance hasnt been assigned
                 if (this.destination[0] == 0 && this.destination[1] == 0 && this.idleTimer == 0.0) {
                     //randomly pick one of four directions
-                    let randNum = Math.random() * 8;
-                    let randy = Math.ceil(randNum);
-                    if (randy < 2) randy = 1;
-                    if (randy >= 2 && randy < 4) randy = 2;
-                    if (randy >= 4 && randy < 6) randy = 3;
-                    if (randy >= 6) randy = 4;
-                    let randDir = parseInt(randy);
+                    let randNum = Math.ceil(Math.random() * 8);
+                    if (randNum < 2) randNum = 1;
+                    if (randNum >= 2 && randNum < 4) randNum = 2;
+                    if (randNum >= 4 && randNum < 6) randNum = 3;
+                    if (randNum >= 6) randNum = 4;
                     //Pick a random distance within extents
                     let randMoveAmount = 0;
-                    //let posOrNeg = parseInt(Math.ceil(Math.random() * 2));
-                    if (randDir == 1 || randDir == 2) {
+                    if (randNum == 1 || randNum == 2) {
                         randMoveAmount = Math.random() * this.xRange;
                         //Decide which way to increment the position
-                        if (randDir == 2)
-                            this.destination[0] = this.originalPosition[0] + randMoveAmount;
+                        if (randNum == 2) this.destination[0] = this.originalPosition[0] + randMoveAmount;
                         else
                             this.destination[0] = this.originalPosition[0] - randMoveAmount;
                     } else {
                         randMoveAmount = Math.random() * this.yRange;
-                        if (randDir == 4)
-                            this.destination[1] = this.originalPosition[1] + randMoveAmount;
+                        if (randNum == 4) this.destination[1] = this.originalPosition[1] + randMoveAmount;
                         else
                             this.destination[1] = this.originalPosition[1] - randMoveAmount;
                     }
 
-                    this.moveDirection = randDir;
+                    this.moveDirection = randNum;
                     this.idleTimer = Math.random() * this.maxIdleTimer;
                 }
                 //move to random distance within extents
                 //If moving : left
-                if (this.moveDirection == 1) {
-                    this.characterSprite.rotation = -90 * (3.14 / 180);
-                    this.characterSprite.setVelocityX(-30);
-                }
+                if (this.moveDirection === 1) this.Move(-90 * (3.14 / 180), -30, 0);
                 //If moving : right
-                if (this.moveDirection == 2) {
-                    this.characterSprite.rotation = 90 * (3.14 / 180);
-                    this.characterSprite.setVelocityX(30);
-                }
+                if (this.moveDirection === 2) this.Move(90 * (3.14 / 180), 30, 0);
                 //If moving : up
-                if (this.moveDirection == 3) {
-                    this.characterSprite.rotation = 0 * (3.14 / 180);
-                    this.characterSprite.setVelocityY(-30);
-                }
+                if (this.moveDirection === 3) this.Move(0, 0, -30);
                 //If moving : down
-                if (this.moveDirection == 4) {
-                    this.characterSprite.rotation = 180 * (3.14 / 180);
-                    this.characterSprite.setVelocityY(30);
-                }
+                if (this.moveDirection === 4) this.Move(180 * (3.14 / 180), 0, 30);
                 //Clear target
                 this.target = null;
                 //Check if player in vicinity
@@ -297,14 +257,13 @@ class NPC{
                         this.characterSprite.setVelocityY(0);
                         this.moveDirection = 5;
                     }
-                } else if (this.moveDirection == 5) {
+                } else if (this.moveDirection === 5) {
                     this.idleTimer -= 0.1;
-                    //console.log("idle timer: " + this.idleTimer);
                     if (this.idleTimer < 0.0) {
                         this.idleTimer = 0.0;
                         this.moveDirection = 0;
                     }
-                } else if (this.moveDirection == 6) {
+                } else if (this.moveDirection === 6) {
                     if (this.target == null) {
                         this.moveDirection = 0;
                     } else {
@@ -323,7 +282,7 @@ class NPC{
                         } else
                             //follow straight
                             //this.characterSprite.setVelocityX(0);
-                        //follow up
+                            //follow up
                         if (this.target.characterSprite.y > this.characterSprite.y - 30) {
                             this.characterSprite.setVelocityY(30);
                             this.characterSprite.rotation = 180 * (3.14 / 180);
@@ -339,9 +298,9 @@ class NPC{
                             this.characterSprite.setVelocityY(0);
 
                         //Check if within range of ranged attacks
-                        if(this.isRanged && this.rangedSpeed == 0.0) {
+                        if (this.isRanged && this.rangedSpeed == 0.0) {
                             if (Phaser.Math.Distance.Between(this.target.characterSprite.x, this.target.characterSprite.y, this.characterSprite.x, this.characterSprite.y) <= this.attackRange) {
-                                if(this.CheckFacingEnemy()) {
+                                if (this.CheckFacingEnemy()) {
                                     this.projectiles.push(new RangedAttack(this.gameScene.physics.add.sprite(this.characterSprite.x, this.characterSprite.y, 'fireball'), 150, this.shootDirection, 500, 5, this.enemies, this.gameScene));
                                     this.rangedSpeed = this.maxRangedSpeed;
                                 }
@@ -359,5 +318,4 @@ class NPC{
             }
         }
     }
-
 }

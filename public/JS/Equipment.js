@@ -39,30 +39,31 @@ class Weapon {
 
         this.enemies = enemies;
         if(this.enemies != null)
-            gameScene.physics.add.collider(this.bodySprite, this.enemies, function(me, gameObject){self.Attack(me, gameObject)}, null, self);
+            gameScene.physics.add.collider(this.bodySprite, enemies, function(me, gameObject){self.Attack(me, gameObject)}, null, self);
     }
 
-    Attack(self, gameObject){
-        if(self.parent.isAttacking && gameObject.parent.canBeDamaged == true) {
+    Attack(self, gameObject) {
+        if (self.parent.isAttacking && gameObject.parent.canBeDamaged == true) {
 
             //Apply damage
-            gameObject.parent.TakeDamage(self.damage);
-            if(gameObject.parent.health <= 0)
-            {
+            gameObject.parent.TakeDamage(self.parent.owner.attackBonus);
+            if (gameObject.parent.health <= 0) {
+                self.parent.owner.money += gameObject.parent.cashDrop;
+                self.parent.owner.moneyText.text = "Cash: " + self.parent.owner.money;
                 gameObject.parent.Destruct();
-            }else
-            {
+            } else {
                 gameObject.parent.isDamaged = true;
             }
             self.parent.isAttacking = false;
-             }
         }
-
+    }
     Update()
     {
-        if(this.isRangedAttacking)
+        if(this.isRangedAttacking && this.owner.mana >= 20 - this.owner.manaBonus)
         {
             this.rangedAttacks.push(new RangedAttack(this.gameScene.physics.add.sprite(this.bodySprite.x, this.bodySprite.y, this.rangeSprite), 30, this.owner.moveDirection, 100, 5, this.enemies, this.gameScene));
+            let newM = this.owner.mana - (20 + this.owner.manaBonus);
+            this.owner.UpdateStats(this.owner.health, newM);
             this.isRangedAttacking = false;
         }
 

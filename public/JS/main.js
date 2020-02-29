@@ -61,8 +61,11 @@ function create ()
     let questList = [questOne, questTwo, questThree, questFour];
 
     //Setup player
-    player1 = new Player(this.physics.add.sprite(400, 300, 'gareth'), this.add.image(885, 20, 'health'), this.add.image(885, 20, 'health-negative'),
-        this.add.text(955, 12.5, '10'), this.add.image(885, 60, 'mana'), this.add.image(885, 60, 'mana-negative'), this.add.text(955, 52.5, '70'),
+    player1 = new Player(this.physics.add.sprite(400, 300, 'gareth').setDepth(1),
+        this.add.image(885, 20, 'health').setScrollFactor(0), this.add.image(885, 20, 'health-negative').setScrollFactor(0),
+        this.add.text(955, 12.5, '10').setScrollFactor(0),
+        this.add.image(885, 60, 'mana').setScrollFactor(0), this.add.image(885, 60, 'mana-negative').setScrollFactor(0),
+        this.add.text(955, 52.5, '70').setScrollFactor(0),
         questList, gameScene);
     player1.characterSprite.setCollideWorldBounds(true);
     player1.InitialiseHUD();
@@ -72,23 +75,23 @@ function create ()
     let npcInfo = ['my nama jeff', 'whats your nama sama', 'I have a big banana',
         'you want to sampa?', 'options-2', 'yes', 'no', 'ai-Ok'];
     let npcInfoFork = ['great! ill see you later my hombre', 'that sucks brother rest in peace'];
-    npc1 = new NPC(this.physics.add.image(200,100, 'npc').setImmovable(true), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, false, 0, 0, null, false, true, 0, 5);
+    npc1 = new NPC(this.physics.add.image(200,100, 'npc').setImmovable(true), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, false, 0, 0, null, false, true, 0, 5, 0);
     npc1.characterSprite.body.allowGravity = false;
-    this.physics.add.collider(player1.characterSprite, npc1.characterSprite, function(){callfunc(npc1)});
+    this.physics.add.collider(player1.characterSprite, npc1.characterSprite, function(){player1.positionInteractMenu(npc1)});
 
     npcInfo = ['would you like to puruse my wares?', 'options-2', 'yes', 'no'];
     npcInfoFork = ['create-shop', 'alright fuck you too then'];
-    npc2 = new NPC(this.physics.add.image(400,100, 'shopkeeper').setImmovable(true), 180 * (3.14/180), npcInfo, npcInfoFork, this, 'shop1' , false, 0, 0, null);
+    npc2 = new NPC(this.physics.add.image(400,100, 'shopkeeper').setImmovable(true), 180 * (3.14/180), npcInfo, npcInfoFork, this, 'shop1' , false, 0, 0, null, false, false, 0, 0, 0);
     npc2.characterSprite.body.allowGravity = false;
-    this.physics.add.collider(player1.characterSprite, npc2.characterSprite, function(){callfunc(npc2)});
+    this.physics.add.collider(player1.characterSprite, npc2.characterSprite, function(){player1.positionInteractMenu(npc2)});
 
 
     //Enemy
     npcInfo = [''];
     npcInfoFork = [''];
-    npc3 = new NPC(this.physics.add.image(600,100, 'enemy1').setImmovable(true), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, true, 50, 50, players, true);
+    npc3 = new NPC(this.physics.add.image(600,100, 'enemy1').setImmovable(true), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, true, 50, 50, players, true, false, 0, 0,50);
     npc3.characterSprite.body.allowGravity = false;
-    this.physics.add.collider(player1.characterSprite, npc3.characterSprite, function(){callfunc(npc3)});
+    this.physics.add.collider(player1.characterSprite, npc3.characterSprite, function(){player1.positionInteractMenu(npc3)});
     let playerColliders = [ player1.characterSprite ];
     npc3.enemies = playerColliders;
 
@@ -102,85 +105,13 @@ function create ()
     //Set camera to follow the first player
     this.cameras.main.startFollow(player1.characterSprite);
 
-
-    this.input.keyboard.on('keydown_X', interact, this);
-    this.input.on('gameobjectdown', function (pointer, button)
-    {
-        if(button.name == "chatboxclosebutton")
-            player1.ToggleChatBox(false);
-        else
-            if(button.name == 'chatbox')
-                player1.ToggleChatBox(true);
-        else
-            if(button.name == 'chatboxcontinuebutton')
-            {
-                player1.ActivateChat(player1.collisionPartner.information, player1.chatIndex + 1)
-            }
-            if(button.name == 'notificationboxclosebutton')
-                player1.ToggleNotificationBox(false, ' ');
-        else
-            if(button.name == "questtoggle")
-                player1.ToggleFlickBook(2);
-        else
-            if(button.name == "geartoggle")
-                player1.ToggleFlickBook(1);
-        else
-            if(button.name == "inventorytoggle")
-                player1.ToggleFlickBook(0);
-        else {
-                //All normal buttons accounted for: check the item type
-                let tempname = button.name.split('-');
-
-                if (tempname[0] == "dialogue") {
-                    player1.ActivateChat(player1.collisionPartner.informationFork, 0, true, tempname[1]);
-                }
-
-                if(button.name == "0")
-                {
-                    player1.ToggleNotificationBox(true, 0);
-                }
-
-                if(button.name == "save")
-                {
-                    player1.Save();
-                }
-                if(button.name == "load")
-                {
-                    player1.Load();
-                }
-                if(button.name == "gearbutton")
-                {
-                    if(!player1.gearStatShowing)
-                        player1.ToggleBonuses(true);
-                    else
-                        player1.ToggleBonuses(false);
-                }
-
-                player1.CheckInput(pointer, button);
-
-            }
-    });
+    player1.CheckInput();
 
     //enable cursor input
     cursors = this.input.keyboard.createCursorKeys();
 
 }
-function interact()
-{
-    if(player1.collisionPartner != null) {
-        player1.notificationBoxText.visible = true;
-        player1.ActivateChat(player1.collisionPartner.information, 0, false, 0);
-    }
-}
 
-function callfunc(collisionPartner)
-{
-    player1.notificationBoxText.x = Math.floor(player1.characterSprite.x + player1.characterSprite.width / 2);//player1.characterSprite.x;
-    player1.notificationBoxText.y = Math.floor(player1.characterSprite.y + player1.characterSprite.height / 2);
-    player1.notificationBoxText.text = "press x to interact";
-    player1.notificationBoxText.visible = true;
-    player1.collisionPartner = collisionPartner;
-}
 
 function update() {
 
