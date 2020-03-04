@@ -16,6 +16,8 @@ class Player {
         this.spawnPoint = [this.characterSprite.x, this.characterSprite.y];
 
         //Setup healthbar positioning
+        
+
         this.healthbar = healthspr;
         this.healthbar.setScrollFactor(0);
         this.healthbarText = healthtxt;
@@ -138,7 +140,7 @@ class Player {
     //add initial items
     AddItemToInventory(item, indexX, indexY, mageDef, melDef, equipType) {
         //Setup new item by its sprite
-        let tmpSprite = gameScene.add.sprite(825 + (indexX * 60), 335 + (indexY * 65), item, 1).setInteractive();
+        let tmpSprite = gameScene.add.sprite(825 + (indexX * 50), 335 + (indexY * 65), item, 1).setInteractive();
         tmpSprite.setScrollFactor(0);
         tmpSprite.name = item.toString() + '-' + (indexX + (indexY * 3));
 

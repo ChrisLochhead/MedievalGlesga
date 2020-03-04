@@ -6,7 +6,7 @@ function LoadGameAssets(gameScene)
     gameScene.load.image('second-helmet', "img/Hat-Inventory-Alternate.png");
     gameScene.load.image('default-chestplate', "img/Shirt-Inventory.png");
     gameScene.load.image('default-legs', "img/Legs-Inventory.png");
-    gameScene.load.image('default-weapon', "img/Sword-Inventory.png");
+    gameScene.load.image('default-weapon', "img/sword.png");
     gameScene.load.image('default-offhand', "img/Shield-Inventory.png");
 
     //load consumable items
@@ -51,6 +51,7 @@ function LoadPlayerAssets(gameScene)
     gameScene.load.image('notificationbox', "img/NotificationBox.png");
 
     //load stat bars
+    gameScene.load.image('status-bars', "img/HealthMana-Bars.png");
     gameScene.load.image('health', "img/health.png");
     gameScene.load.image('health-negative', "img/health-negative.png");
     gameScene.load.image('mana', "img/mana.png");

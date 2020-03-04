@@ -61,7 +61,7 @@ function create ()
     let questList = [questOne, questTwo, questThree, questFour];
 
     //Setup player
-    player1 = new Player(this.physics.add.sprite(400, 300, 'gareth'), this.add.image(885, 20, 'health'), this.add.image(885, 20, 'health-negative'),
+    player1 = new Player(this.physics.add.sprite(400, 300, 'gareth'), this.add.image(885, 60, 'status-bars'), this.add.image(885, 20, 'health-negative'),
         this.add.text(955, 12.5, '10'), this.add.image(885, 60, 'mana'), this.add.image(885, 60, 'mana-negative'), this.add.text(955, 52.5, '70'),
         questList, gameScene);
     player1.characterSprite.setCollideWorldBounds(true);
