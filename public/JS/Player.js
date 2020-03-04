@@ -109,17 +109,17 @@ class Player {
         this.inventory = this.gameScene.add.sprite(885, 415, 'inventory');
         this.inventory.setScrollFactor(0);
 
+        this.gameScene.add.sprite(819, 257, 'inventorytoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("inventorytoggle");
+        this.gameScene.add.sprite(885, 257, 'geartoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("geartoggle");
+        this.gameScene.add.sprite(951, 257, 'questtoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("questtoggle");
+
         //Test save button
         this.gameScene.add.text(300, 400, 'save game').setInteractive().setDepth(3).setName('save').setScrollFactor(0);
         this.gameScene.add.text(500, 400, 'load button').setInteractive().setDepth(3).setName('load').setScrollFactor(0);
 
-        this.gameScene.add.sprite(818, 256, 'inventorytoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("inventorytoggle");
-        this.gameScene.add.sprite(884, 256, 'geartoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("geartoggle");
-        this.gameScene.add.sprite(951, 256, 'questtoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("questtoggle");
-
         //Setup chatbox and notification box
         this.chatbox = this.gameScene.add.sprite(385, 500, 'chatbox').setDepth(1).setScrollFactor(0).setName("chatbox");
-        this.chatboxCloseButton = this.gameScene.add.sprite(732, 432, 'chatboxclosebutton', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("chatboxclosebutton");
+        this.chatboxCloseButton = this.gameScene.add.sprite(737, 421, 'chatboxclosebutton', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("chatboxclosebutton");
         this.notificationBox = this.gameScene.add.sprite(385, 200, 'notificationbox', 1).setInteractive().setDepth(2).setScrollFactor(0).setName("notificationbox").setVisible(false);
         this.notificationBoxCloseButton = this.gameScene.add.sprite(600, 105, 'chatboxclosebutton', 1).setInteractive().setScrollFactor(0).setDepth(3).setVisible(false).setName('notificationboxclosebutton');
         this.notificationBoxText = this.gameScene.add.text(100, 100, " ").setVisible(false).setDepth(3).setColor("#00000").setScrollFactor(0);
@@ -152,6 +152,7 @@ class Player {
         this.AddItemToInventory('mana-potion', 1, 2, 0, 0, 20, 0, 0, 6, 80, 40, true);
     }
 
+
     UpdateCash(amount)
     {
         this.money += amount;
@@ -171,12 +172,12 @@ class Player {
             this.chatbox.input.enabled = false;
             this.chatboxCloseButton.input.enabled = true;
             this.chatboxCloseButton.visible = true;
-            this.chatbox.y -= 79;
+            this.chatbox.y -= 70;
         } else {
             this.chatboxCloseButton.input.enabled = false;
             this.chatboxCloseButton.visible = false;
             this.chatbox.setTexture('chatboxclosed');
-            this.chatbox.y += 79;
+            this.chatbox.y += 70;
             this.chatbox.setInteractive();
         }
     }
@@ -185,28 +186,49 @@ class Player {
         //Activate inventory
         if (index === 0) {
             this.inventory.setTexture('inventory');
-            if (this.currentFlickBookIndex === 1) this.ShowGear(false);
-            else if (this.currentFlickBookIndex === 2) this.ShowQuests(false);
+            if (this.currentFlickBookIndex === 1){
+                this.ShowGear(false);
+                this.gearToggle.setVisible(true);
+            }
+
+            else if (this.currentFlickBookIndex === 2){
+                this.ShowQuests(false);
+                this.questToggle.setVisible(true);
+            }
 
             this.ShowInventory(true);
             this.currentFlickBookIndex = 0;
+            this.inventoryToggle.setVisible(false);
         }
         //Activate gear tab
         if (index === 1) {
             this.inventory.setTexture('gear');
-            if (this.currentFlickBookIndex === 0) this.ShowInventory(false);
-            else if (this.currentFlickBookIndex === 2) this.ShowQuests(false);
+            if (this.currentFlickBookIndex == 0){
+                this.ShowInventory(false);
+                this.inventoryToggle.setVisible(true);
+            }
+            else if (this.currentFlickBookIndex == 2){
+                this.ShowQuests(false);
+                this.questToggle.setVisible(true);
+            }
 
             this.ShowGear(true);
+            this.gearToggle.setVisible(false);
             this.currentFlickBookIndex = 1;
         }
         //Activate quest tab
         if (index === 2) {
             this.inventory.setTexture('quests');
-            if (this.currentFlickBookIndex === 0) this.ShowInventory(false);
-            else if (this.currentFlickBookIndex === 1) this.ShowGear(false);
-
+            if (this.currentFlickBookIndex == 0){
+                this.ShowInventory(false);
+                this.inventoryToggle.setVisible(true);
+            }
+            if (this.currentFlickBookIndex == 1){
+                this.ShowGear(false);
+                this.gearToggle.setVisible(true);
+            }
             this.ShowQuests(true);
+            this.questToggle.setVisible(false);
             this.currentFlickBookIndex = 2;
         }
     }

@@ -6,7 +6,7 @@ function LoadGameAssets(gameScene)
     gameScene.load.image('second-helmet', "img/Hat-Inventory-Alternate.png");
     gameScene.load.image('default-chestplate', "img/Shirt-Inventory.png");
     gameScene.load.image('default-legs', "img/Legs-Inventory.png");
-    gameScene.load.image('default-weapon', "img/Sword-Inventory.png");
+    gameScene.load.image('default-weapon', "img/sword.png");
     gameScene.load.image('default-offhand', "img/Shield-Inventory.png");
 
     //load consumable items
@@ -34,26 +34,27 @@ function LoadGameAssets(gameScene)
 }
 function LoadPlayerAssets(gameScene)
 {
-    //load inventory
-    gameScene.load.image('inventory', "img/Inventory.png");
-    gameScene.load.image('gear', "img/Gear.png");
-    gameScene.load.image('gearstats', "img/GearStats.png");
-    gameScene.load.image('quests', "img/QuestList.png");
+    //load inventory, gear and quests UI
+    gameScene.load.image('inventory', "img/panel-inventory.png");
+    gameScene.load.image('gear', "img/panel-equipment.png");
+    gameScene.load.image('quests', "img/panel-quest.png");
 
-    gameScene.load.image('inventorytoggle', "img/InventoryToggleButton.png");
-    gameScene.load.image('geartoggle', "img/GearToggleButton.png");
+    gameScene.load.image('inventorytoggle', "img/desBtn-inventory.png");
+    gameScene.load.image('geartoggle', "img/desBtn-equipment.png");
     gameScene.load.image('gearbutton', "img/GearButton.png");
-    gameScene.load.image('questtoggle', "img/QuestToggleButton.png");
+    gameScene.load.image('questtoggle', "img/desBtn-quests.png");
+
 
     //load chatbox and notifications
-    gameScene.load.image('chatbox', "img/ChatBox.png");
-    gameScene.load.image('chatboxclosebutton', "img/ChatBox-CloseButton.png");
-    gameScene.load.image('chatboxclosed', "img/ChatBox-Closed.png");
+    gameScene.load.image('chatbox', "img/chatBox-Open.png");
+    gameScene.load.image('chatboxclosebutton', "img/chatBox-MinButton.png");
+    gameScene.load.image('chatboxclosed', "img/chatBox-Closed.png");
 
     //For notifications and quest dialogues
     gameScene.load.image('notificationbox', "img/NotificationBox.png");
 
     //load stat bars
+    gameScene.load.image('status-bars', "img/HealthMana-Bars.png");
     gameScene.load.image('health', "img/health.png");
     gameScene.load.image('health-negative', "img/health-negative.png");
     gameScene.load.image('mana', "img/mana.png");
