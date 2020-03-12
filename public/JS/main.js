@@ -43,13 +43,22 @@ function preload ()
 function create ()
 {
 
-    //draw a floor
-    for(let i = 0; i < 63; i++){
-        for(let j = 0; j < 63; j++){
-            let temp = Math.floor(Math.random() * 4) + 1;
-            this.add.image(16 + (i*32), 16 + (j*32), 'grass' + temp);
-        }
-    }
+    // Draw Map
+    var map = this.make.tilemap({ key: 'main-map' });
+    var prim_tiles = map.addTilesetImage('nature');
+    var seco_tiles = map.addTilesetImage('rural-tileset-tilex');
+
+    var layer = map.createStaticLayer('Base', prim_tiles, 0, 0);
+    //let layer2 = map.createStaticLayer(2 , seco_tiles);
+
+    // //draw a floor
+    // for(let i = 0; i < 63; i++){
+    //     for(let j = 0; j < 63; j++){
+    //         let temp = Math.floor(Math.random() * 4) + 1;
+    //         this.add.image(16 + (i*32), 16 + (j*32), 'grass' + temp);
+    //     }
+    // }
+
     //game.world.setBounds(0, 0, 2000, 2000);
     //initialise quests
     let questOne = this.add.text(805, 330, 'One Small Flavour', 1).setInteractive().setVisible(false).setDepth(1).setName('0').setScrollFactor(0).setColor("#ff0000 ");

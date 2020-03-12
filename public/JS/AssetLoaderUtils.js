@@ -1,3 +1,14 @@
+function LoadFloor(gameScene)
+{
+    gameScene.load.image('grass1', 'img/GrassTile01.png');
+    gameScene.load.image('grass2', 'img/GrassTile02.png');
+    gameScene.load.image('grass3', 'img/GrassTile03.png');
+    gameScene.load.image('grass4', 'img/GrassTile04.png');
+
+    gameScene.load.image('nature', 'img/map/nature.png');
+    gameScene.load.image('rural-tileset-tilex', 'img/map/outdoorobj.png');
+    gameScene.load.tilemapTiledJSON('main-map', 'img/map/mainmap.json');
+}
 function LoadGameAssets(gameScene)
 {
     //load sprites for inventory items
@@ -59,11 +70,4 @@ function LoadPlayerAssets(gameScene)
 
     //load our hero
     gameScene.load.image('gareth', 'img/Gareth.png');
-}
-function LoadFloor(gameScene)
-{
-    gameScene.load.image('grass1', 'img/GrassTile01.png');
-    gameScene.load.image('grass2', 'img/GrassTile02.png');
-    gameScene.load.image('grass3', 'img/GrassTile03.png');
-    gameScene.load.image('grass4', 'img/GrassTile04.png');
 }
