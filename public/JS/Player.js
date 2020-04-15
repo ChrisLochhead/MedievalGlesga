@@ -82,7 +82,7 @@ class Player {
 
     InitialiseHUD() {
         //setup inventory
-        this.inventory = this.gameScene.add.sprite(885, 415, 'inventory');
+        this.inventory = this.gameScene.add.sprite(885, 415, 'inventory').setDepth(1);
         this.inventory.setScrollFactor(0);
 
         this.inventoryToggle = this.gameScene.add.sprite(819, 257, 'inventorytoggle', 1).setInteractive().setDepth(1);
@@ -140,7 +140,7 @@ class Player {
     //add initial items
     AddItemToInventory(item, indexX, indexY, mageDef, melDef, equipType) {
         //Setup new item by its sprite
-        let tmpSprite = gameScene.add.sprite(825 + (indexX * 50), 335 + (indexY * 65), item, 1).setInteractive();
+        let tmpSprite = gameScene.add.sprite(819 + (indexX * 44), 336 + (indexY * 45), item, 1).setInteractive().setDepth(2);
         tmpSprite.setScrollFactor(0);
         tmpSprite.name = item.toString() + '-' + (indexX + (indexY * 3));
 
@@ -278,6 +278,7 @@ class Player {
             this.mainWeapon = null;
         }
     }
+
     AddGear(index, itemName) {
 
         let isReplaced = false;
@@ -299,7 +300,7 @@ class Player {
                     let existingGearNameArray = this.gearItems[index].inventorySprite.name.split('-');
                     let existingGearName = existingGearNameArray[0] + '-' + existingGearNameArray[1];
                     //replace in position
-                    let tmpSprite = this.gameScene.add.sprite(825 + (xPos * 60), 335 + (yPos * 65), existingGearName, 1).setInteractive();
+                    let tmpSprite = this.gameScene.add.sprite(825 + (xPos * 60), 335 + (yPos * 65), existingGearName, 1).setInteractive().setDepth(2);
                     tmpSprite.setScrollFactor(0);
                     tmpSprite.name = existingGearName + '-' + intIndexPosition;
 
@@ -317,7 +318,7 @@ class Player {
 
             //Find gear index
             let gearIndex = this.GetGearIndex(index);
-            let tmpSprite = this.gameScene.add.sprite(gearIndex[0], gearIndex[1], equipName, 1).setInteractive();
+            let tmpSprite = this.gameScene.add.sprite(gearIndex[0], gearIndex[1], equipName, 1).setInteractive().setDepth(2);
 
             tmpSprite.setScrollFactor(0);
             tmpSprite.name = equipName.toString() + '-' + index;
@@ -371,7 +372,7 @@ class Player {
                 let itemNameArray = itemName.split('-');
                 let itemNameCombined = itemNameArray[0] + '-' + itemNameArray[1];
 
-                let tmpSprite = this.gameScene.add.sprite(825 + (xPos * 60), 335 + (yPos * 65), itemNameCombined, 1).setInteractive();
+                let tmpSprite = this.gameScene.add.sprite(819 + (xPos * 44), 336 + (yPos * 44), itemNameCombined, 1).setInteractive().setDepth(2);;
                 tmpSprite.setScrollFactor(0);
                 tmpSprite.name = itemNameCombined.toString() + '-' + i;
 
@@ -423,17 +424,18 @@ class Player {
             return 4;
     }
 
+    // 819 + (xPos * 44), 336 + (yPos * 44)
     GetGearIndex(index) {
         if (index == 0)
-            return [887.5, 350];
+            return [885, 336];
         if (index == 1)
-            return [887.5, 416];
+            return [885, 382];
         if (index == 2)
-            return [887.5, 480];
+            return [885, 428];
         if (index == 3)
-            return [945, 416];
+            return [930, 382];
         if (index == 4)
-            return [828, 416];
+            return [838, 382];
 
         return [0, 0];
     }
@@ -572,7 +574,6 @@ class Player {
                 this.ToggleNotificationBox(true, button.name);
             }
         }
-
     }
 
     CheckCombat(self)
@@ -592,6 +593,29 @@ class Player {
             self.shield.isRangedAttacking = true;
         }
     }
+
+    TeleportPlayer(posX, posY)
+    {
+        this.characterSprite.x = posX;
+        this.characterSprite.y = posY;
+        if(this.mainWeapon){
+            this.mainWeapon.bodySprite.x = posX;
+            this.mainWeapon.bodySprite.y = posY;
+        }
+        if(this.shield){
+            this.shield.bodySprite.x = posX;
+            this.shield.bodySprite.y = posY;
+        }
+        if(this.chestplate){
+            this.chestplate.bodySprite.x = posX;
+            this.chestplate.bodySprite.y = posY;
+        }
+        if(this.helmet){
+            this.helmet.bodySprite.x = posX;
+            this.helmet.bodySprite.y = posY;
+        }
+    }
+
     MovePlayer(velocityX, velocityY, Rotation)
     {
         this.characterSprite.setVelocityX(velocityX);
@@ -648,7 +672,8 @@ class Player {
 
     }
 
-    Update(cursors){
+    Update(cursors)
+    {
 
         //Check for input from buttons
         let self = this;
@@ -720,6 +745,7 @@ class Player {
 
         if(this.damageTimer != 0.0)
             this.damageTimer -= 0.1;
+
         if(this.damageTimer < 0.0) {
             this.damageTimer = 0.0;
             this.characterSprite.clearTint();
@@ -727,7 +753,6 @@ class Player {
 
         if(this.shield != null)
             this.shield.Update();
-
     }
 
 }
