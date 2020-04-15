@@ -1,17 +1,49 @@
+function LoadFloor(gameScene)
+{
+    // Tilesets for the maps
+    gameScene.load.image('walls1_trans', 'img/maps/tilesets/walls1_trans.png');
+    gameScene.load.image('walls1', 'img/maps/tilesets/walls1.png');
+    gameScene.load.image('walls2', 'img/maps/tilesets/walls2.png');
+    gameScene.load.image('walls3', 'img/maps/tilesets/walls3.png');
+    gameScene.load.image('floor1', 'img/maps/tilesets/floor1.png');
+    gameScene.load.image('roofs1', 'img/maps/tilesets/roofs1.png');
+    gameScene.load.image('interior1', 'img/maps/tilesets/interior1.png');
+    gameScene.load.image('interior2', 'img/maps/tilesets/interior2.png');
+    gameScene.load.image('interior4', 'img/maps/tilesets/interior4.png');
+    gameScene.load.image('interior5', 'img/maps/tilesets/interior5.png');
+    gameScene.load.image('ships2', 'img/maps/tilesets/ships2.png');
+    gameScene.load.image('nature1', 'img/maps/tilesets/nature1.png');
+    gameScene.load.image('nature2', 'img/maps/tilesets/nature2.png');
+    gameScene.load.image('forage2', 'img/maps/tilesets/forage2.png');
+    gameScene.load.image('statues1', 'img/maps/tilesets/statues1.png');
+    
+
+    // Maps
+    gameScene.load.tilemapTiledJSON('mainmap', 'img/maps/mainmap.json');
+    gameScene.load.tilemapTiledJSON('blacksmith', 'img/maps/blacksmith.json');
+    gameScene.load.tilemapTiledJSON('generalgoods', 'img/maps/generalgoods.json');
+    gameScene.load.tilemapTiledJSON('gandomanor', 'img/maps/gandomanor.json');
+    gameScene.load.tilemapTiledJSON('cave', 'img/maps/cave.json');
+    gameScene.load.tilemapTiledJSON('tower', 'img/maps/tower.json');
+}
 function LoadGameAssets(gameScene)
 {
-    //load sprites for inventory items
+    //Load sprites for inventory items
+
+    //Load Game Asset sprite sheet
+
+
     //Load equip-able items
-    gameScene.load.image('default-helmet', "img/Hat-Inventory.png");
-    gameScene.load.image('second-helmet', "img/Hat-Inventory-Alternate.png");
-    gameScene.load.image('default-chestplate', "img/Shirt-Inventory.png");
-    gameScene.load.image('default-legs', "img/Legs-Inventory.png");
-    gameScene.load.image('default-weapon', "img/sword.png");
-    gameScene.load.image('default-offhand', "img/Shield-Inventory.png");
+    gameScene.load.image('default-helmet', "img/assets/helmet1.png");
+    gameScene.load.image('second-helmet', "img/assets/helmet2.png");
+    gameScene.load.image('default-chestplate', "img/assets/chest1.png");
+    gameScene.load.image('default-legs', "img/assets/boots1.png");
+    gameScene.load.image('default-weapon', "img/assets/sword1.png");
+    gameScene.load.image('default-offhand', "img/assets/shield1.png");
 
     //load consumable items
-    gameScene.load.image('health-potion', "img/HealthPotion.png");
-    gameScene.load.image('mana-potion', "img/ManaPotion.png");
+    gameScene.load.image('health-potion', "img/assets/healthpotion.png");
+    gameScene.load.image('mana-potion', "img/assets/manapotion.png");
 
     //Load body items
     gameScene.load.image('default-weapon-body', "img/Sword-Body.png");
@@ -62,11 +94,4 @@ function LoadPlayerAssets(gameScene)
 
     //load our hero
     gameScene.load.image('gareth', 'img/Gareth.png');
-}
-function LoadFloor(gameScene)
-{
-    gameScene.load.image('grass1', 'img/GrassTile01.png');
-    gameScene.load.image('grass2', 'img/GrassTile02.png');
-    gameScene.load.image('grass3', 'img/GrassTile03.png');
-    gameScene.load.image('grass4', 'img/GrassTile04.png');
 }
