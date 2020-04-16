@@ -109,9 +109,9 @@ class Player {
         this.inventory = this.gameScene.add.sprite(885, 415, 'inventory').setDepth(1);
         this.inventory.setScrollFactor(0);
 
-        this.gameScene.add.sprite(819, 257, 'inventorytoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("inventorytoggle");
-        this.gameScene.add.sprite(885, 257, 'geartoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("geartoggle");
-        this.gameScene.add.sprite(951, 257, 'questtoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("questtoggle");
+        this.inventoryToggle = this.gameScene.add.sprite(819, 257, 'inventorytoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("inventorytoggle");
+        this.gearToggle = this.gameScene.add.sprite(885, 257, 'geartoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("geartoggle");
+        this.questToggle = this.gameScene.add.sprite(951, 257, 'questtoggle', 1).setInteractive().setDepth(1).setScrollFactor(0).setName("questtoggle");
 
         //Test save button
         this.gameScene.add.text(300, 400, 'save game').setInteractive().setDepth(3).setName('save').setScrollFactor(0);
@@ -142,14 +142,14 @@ class Player {
 
     InitialiseInventory() {
         //default inventory
-        this.AddItemToInventory('default-helmet', 0, 0, 0, 1, 3, 0, 0, 0, 50, 25,true);
-        this.AddItemToInventory('second-helmet', 1, 0, 0, 2, 6, 3, 0, 0, 100, 50, true);
-        this.AddItemToInventory('default-chestplate', 2, 0, 0, 6, 2, 0, 0, 1, 125, 67.5, true);
-        this.AddItemToInventory('default-legs', 0, 1, 0, 5, 1, 0, 0, 2, 95, 47.5, true);
-        this.AddItemToInventory('default-weapon', 1, 1, 10, 1, 1, 0, 0, 4, 60, 30, true);
-        this.AddItemToInventory('default-offhand', 2, 1, 16, 0, 3, 0, 0, 3, 80, 40, true);
-        this.AddItemToInventory('health-potion', 0, 2, 0, 20, 0, 0, 0, 5, 20 , 10, true);
-        this.AddItemToInventory('mana-potion', 1, 2, 0, 0, 20, 0, 0, 6, 80, 40, true);
+        this.AddItemToInventory('default-helmet',       0, 0, 0, 1, 3, 0, 0, 0, 50, 25,true);
+        this.AddItemToInventory('second-helmet',        1, 0, 0, 2, 6, 3, 0, 0, 100, 50, true);
+        this.AddItemToInventory('default-chestplate',   2, 0, 0, 6, 2, 0, 0, 1, 125, 67.5, true);
+        this.AddItemToInventory('default-legs',         3, 0, 0, 5, 1, 0, 0, 2, 95, 47.5, true);
+        this.AddItemToInventory('default-weapon',       0, 1, 10, 1, 1, 0, 0, 4, 60, 30, true);
+        this.AddItemToInventory('default-offhand',      1, 1, 16, 0, 3, 0, 0, 3, 80, 40, true);
+        this.AddItemToInventory('health-potion',        2, 1, 0, 20, 0, 0, 0, 5, 20 , 10, true);
+        this.AddItemToInventory('mana-potion',          3, 1, 0, 0, 20, 0, 0, 6, 80, 40, true);
     }
 
 
@@ -161,8 +161,8 @@ class Player {
 
     AddItemToInventory(item, indexX, indexY, attk, mageDef, melDef, hb, mb, equipType, shopPrice, itemPrice, initial) {
         //Setup new item by its sprite
-        let tmpSprite = gameScene.add.sprite(825 + (indexX * 60), 335 + (indexY * 65), item, 1).setInteractive().setScrollFactor(0).setName(item.toString() + '-' + (indexX + (indexY * 3)));
-        this.inventoryItems[indexX + (indexY * 3)] = new Equipment(tmpSprite, attk, mageDef, melDef, hb, mb, equipType, shopPrice, itemPrice);
+        let tmpSprite = gameScene.add.sprite(819 + (indexX * 44), 336 + (indexY * 45), item, 1).setInteractive().setScrollFactor(0).setName(item.toString() + '-' + (indexX + (indexY * 4))).setDepth(2);
+        this.inventoryItems[indexX + (indexY * 4)] = new Equipment(tmpSprite, attk, mageDef, melDef, hb, mb, equipType, shopPrice, itemPrice);
         if(initial === false) this.UpdateCash(-shopPrice);
     }
 
@@ -310,14 +310,14 @@ class Player {
         } else {
             //if there is already a equip item of the same index equipped
             if (this.gearItems[index] != null) {
-                    let xPos = intIndexPosition % 3;
-                    let yPos = intIndexPosition / 3;
+                    let xPos = intIndexPosition % 4;
+                    let yPos = intIndexPosition / 4;
                     yPos = parseInt(yPos.toString());
 
                     let existingGearNameArray = this.gearItems[index].inventorySprite.name.split('-');
                     let existingGearName = existingGearNameArray[0] + '-' + existingGearNameArray[1];
                     //replace in position
-                    let tmpSprite = this.gameScene.add.sprite(825 + (xPos * 60), 335 + (yPos * 65), existingGearName, 1).setInteractive().setDepth(2);
+                    let tmpSprite = this.gameScene.add.sprite(819 + (xPos * 44), 336 + (yPos * 45), existingGearName, 1).setInteractive().setDepth(2);
                     tmpSprite.setScrollFactor(0);
                     tmpSprite.name = existingGearName + '-' + intIndexPosition;
 
@@ -384,17 +384,17 @@ class Player {
         for (let i = 0; i < this.inventoryItems.length; i++) {
             if (this.inventoryItems[i] == null) {
 
-                let xPos = i % 3;
-                let yPos = i / 3;
+                let xPos = i % 4;
+                let yPos = i / 4;
                 yPos = parseInt(yPos);
                 let itemNameArray = item.name.split('-');
                 let itemNameCombined = itemNameArray[0] + '-' + itemNameArray[1];
 
-                let tmpSprite = this.gameScene.add.sprite(819 + (xPos * 44), 336 + (yPos * 44), itemNameCombined, 1).setInteractive().setDepth(2);;
+                let tmpSprite = this.gameScene.add.sprite(819 + (xPos * 44), 336 + (yPos * 44), itemNameCombined, 1).setInteractive().setDepth(2);
                 tmpSprite.setScrollFactor(0);
                 tmpSprite.name = itemNameCombined.toString() + '-' + i;
 
-                this.inventoryItems[i] = new Equipment(tmpSprite, e.attackBonus, e.mageDefence, e.meleeDefence, e.healthBonus, e.manaBonus, e.itemType, e.shopPrice, e.characterPrice);;
+                this.inventoryItems[i] = new Equipment(tmpSprite, e.attackBonus, e.mageDefence, e.meleeDefence, e.healthBonus, e.manaBonus, e.itemType, e.shopPrice, e.characterPrice);
                 this.UpdateBonuses(-e.attackBonus, -e.mageDefence, -e.meleeDefence, -e.healthBonus, -e.manaBonus);
                 this.inventoryItems[i].inventorySprite.visible = false;
 
@@ -748,7 +748,7 @@ class Player {
                     if (button === self.collisionPartner.shopItems[i].inventorySprite) {
                         let emptySpace = this.FindEmptyInventorySpace();
                         if (emptySpace !== -1 && gearadded === false && self.money >= self.collisionPartner.shopItems[i].shopPrice) {
-                            self.AddItemToInventory(self.collisionPartner.shopItems[i].inventorySprite.name, parseInt(emptySpace % 3), parseInt(emptySpace / 3),
+                            self.AddItemToInventory(self.collisionPartner.shopItems[i].inventorySprite.name, parseInt(emptySpace % 4), parseInt(emptySpace / 4),
                                 self.collisionPartner.shopItems[i].attackBonus,
                                 self.collisionPartner.shopItems[i].mageDefence, self.collisionPartner.shopItems[i].meleeDefence,
                                 self.collisionPartner.shopItems[i].healthBonus, self.collisionPartner.shopItems[i].manaBonus,

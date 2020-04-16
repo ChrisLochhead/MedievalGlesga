@@ -53,9 +53,7 @@ function create ()
     gameScene.physics.world.bounds.width = 10000;
     gameScene.physics.world.bounds.height = 10000;
 
-    levelManager = new LevelManager(gameScene);
-    //levelManager.ChangeMap(this.make.tilemap( {key: 'mainmap'} ), 'mainmap');
- 
+
     //initialise quests
     let questOne = this.add.text(805, 330, 'One Small Flavour', 1).setInteractive().setVisible(false).setDepth(1).setName('0').setScrollFactor(0).setColor("#ff000");
     let questTwo = this.add.text(805, 360, 'Get Them Meds', 1).setInteractive().setVisible(false).setDepth(1).setName('1').setScrollFactor(0).setColor("#ff0000 ");
@@ -77,38 +75,37 @@ function create ()
     player1.InitialiseInventory();
     players.push(player1);
 
-    
-
-    //Setup NPC
-    let npcInfo = ['my nama jeff', 'whats your nama sama', 'I have a big banana',
-        'you want to sampa?', 'options-2', 'yes', 'no', 'ai-Ok'];
-    let npcInfoFork = ['great! ill see you later my hombre', 'that sucks brother rest in peace'];
-    npc1 = new NPC(this.physics.add.image(200,100, 'npc').setImmovable(true).setDepth(1), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, false, 0, 0, null, false, true, 0, 5, 0);
-    npc1.characterSprite.body.allowGravity = false;
-    this.physics.add.collider(player1.characterSprite, npc1.characterSprite, function(){player1.positionInteractMenu(npc1)});
-
-    npcInfo = ['would you like to puruse my wares?', 'options-2', 'yes', 'no'];
-    npcInfoFork = ['create-shop', 'alright fuck you too then'];
-    npc2 = new NPC(this.physics.add.image(400,100, 'shopkeeper').setImmovable(true).setDepth(1), 180 * (3.14/180), npcInfo, npcInfoFork, this, 'shop1' , false, 0, 0, null, false, false, 0, 0, 0);
-    npc2.characterSprite.body.allowGravity = false;
-    this.physics.add.collider(player1.characterSprite, npc2.characterSprite, function(){player1.positionInteractMenu(npc2)});
-
+    // //Setup NPC
+    // let npcInfo = ['my nama jeff', 'whats your nama sama', 'I have a big banana',
+    //     'you want to sampa?', 'options-2', 'yes', 'no', 'ai-Ok'];
+    // let npcInfoFork = ['great! ill see you later my hombre', 'that sucks brother rest in peace'];
+    // npc1 = new NPC(this.physics.add.image(200,100, 'npc').setImmovable(true).setDepth(1), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, false, 0, 0, null, false, true, 0, 5, 0);
+    // npc1.characterSprite.body.allowGravity = false;
+    // this.physics.add.collider(player1.characterSprite, npc1.characterSprite, function(){player1.positionInteractMenu(npc1)});
+    //
+    // npcInfo = ['would you like to puruse my wares?', 'options-2', 'yes', 'no'];
+    // npcInfoFork = ['create-shop', 'alright fuck you too then'];
+    // npc2 = new NPC(this.physics.add.image(400,100, 'shopkeeper').setImmovable(true).setDepth(1), 180 * (3.14/180), npcInfo, npcInfoFork, this, 'shop1' , false, 0, 0, null, false, false, 0, 0, 0);
+    // npc2.characterSprite.body.allowGravity = false;
+    // this.physics.add.collider(player1.characterSprite, npc2.characterSprite, function(){player1.positionInteractMenu(npc2)});
+    //
     // Initial Level Setup
+    levelManager = new LevelManager(gameScene);
     InitMainMap();
-
-    //Enemy
-    npcInfo = [''];
-    npcInfoFork = [''];
-    npc3 = new NPC(this.physics.add.image(600,100, 'enemy1').setImmovable(true).setDepth(1), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, true, 50, 50, players, true, false, 0, 0,50);
-    npc3.characterSprite.body.allowGravity = false;
-    this.physics.add.collider(player1.characterSprite, npc3.characterSprite, function(){player1.positionInteractMenu(npc3)});
-    let playerColliders = [ player1.characterSprite ];
-    npc3.enemies = playerColliders;
-
-    npcs = [npc1.characterSprite, npc2.characterSprite];
-    let enemies = [npc3.characterSprite];
-    player1.npcs = npcs;
-    player1.enemies = enemies;
+    //
+    // //Enemy
+    // npcInfo = [''];
+    // npcInfoFork = [''];
+    // npc3 = new NPC(this.physics.add.image(600,100, 'enemy1').setImmovable(true).setDepth(1), 180 * (3.14/180), npcInfo, npcInfoFork, this, null, true, 50, 50, players, true, false, 0, 0,50);
+    // npc3.characterSprite.body.allowGravity = false;
+    // this.physics.add.collider(player1.characterSprite, npc3.characterSprite, function(){player1.positionInteractMenu(npc3)});
+    // let playerColliders = [ player1.characterSprite ];
+    // npc3.enemies = playerColliders;
+    //
+    // npcs = [npc1.characterSprite, npc2.characterSprite];
+    // let enemies = [npc3.characterSprite];
+    // player1.npcs = npcs;
+    // player1.enemies = enemies;
 
     //Set camera boundaries
     this.cameras.main.setBounds(0, 0, 10000, 10000);
@@ -195,6 +192,7 @@ function HandleMapCollisions()
                 mainCollider[2] = gameScene.physics.add.collider(player1.characterSprite, levelManager.colliderDecolayer2);
                 mainCollider[3] = gameScene.physics.add.collider(player1.characterSprite, levelManager.colliderDecolayer3);
                 doorCollider[0] = gameScene.physics.add.collider(player1.characterSprite, levelManager.merchant_outdoor, function(){ doorHit = "merchant_outdoor"; });
+                InitNPC('generalgoods');
                 break;
             }
 
@@ -274,6 +272,7 @@ function InitMainMap(){
     doorCollider[2] = gameScene.physics.add.collider(player1.characterSprite, levelManager.merchant_indoor, function(){ doorHit = "merchant_indoor"; });
     doorCollider[3] = gameScene.physics.add.collider(player1.characterSprite, levelManager.manor_indoor, function(){ doorHit = "manor_indoor"; });
     doorCollider[4] = gameScene.physics.add.collider(player1.characterSprite, levelManager.tower_indoor, function(){ doorHit = "tower_indoor"; });
+    InitNPC('mainmap');
 }
 
 function clearColliders(){
@@ -294,13 +293,44 @@ function clearColliders(){
 function InitNPC(map){
     switch(map){
         case 'blacksmith':{
+            clearNPCs();
             npcInfo = ['Alright mate, what can I get ya?', 'options-2', 'yes', 'no'];
             npcInfoFork = ['create-shop', 'If yer aint buyin, get out!'];
-            npc[0] = new NPC(gameScene.physics.add.image(293,178, 'shopkeeper').setImmovable(true).setDepth(1), 90 * (3.14/180), npcInfo, npcInfoFork, gameScene, 'shop1' , false, 0, 0, null);
+            npc[0] = new NPC(gameScene.physics.add.image(293,178, 'shopkeeper').setImmovable(true).setDepth(1), 90 * (3.14/180), npcInfo, npcInfoFork, gameScene, 'shop1' , false, 0, 0, null, false, false, 0, 0, 0);
             npc[0].characterSprite.body.allowGravity = false;
-            gameScene.physics.add.collider(player1.characterSprite, npc[0].characterSprite, function(){callfunc(npc[0])});
+            gameScene.physics.add.collider(player1.characterSprite, npc[0].characterSprite, function(){player1.positionInteractMenu(npc[0])});
             player1.npcs = npc;
             break;
+        }
+        case 'generalgoods':{
+            clearNPCs();
+            npcInfo = ['Welcome to ASDA mate, can I help ya?', 'options-2', 'yes', 'no'];
+            npcInfoFork = ['create-shop', 'Aight'];
+            npc[0] = new NPC(gameScene.physics.add.image(168, 222, 'shopkeeper').setImmovable(true).setDepth(1), 180 * (3.14/180), npcInfo, npcInfoFork, gameScene, 'shop1' , false, 0, 0, null, false, false, 0, 0, 0);
+            npc[0].characterSprite.body.allowGravity = false;
+            gameScene.physics.add.collider(player1.characterSprite, npc[0].characterSprite, function(){player1.positionInteractMenu(npc[0])});
+            player1.npcs = npc;
+            break;
+        }
+        case 'mainmap':{
+            clearNPCs();
+            npcInfo = [''];
+            npcInfoFork = [''];
+            npc[0] = new NPC(gameScene.physics.add.image(5659, 3549, 'enemy1').setImmovable(true).setDepth(1), 180 * (3.14/180), npcInfo, npcInfoFork, gameScene, null, true, 50, 50, players, true, false, 0, 0,50);
+            npc[0].characterSprite.body.allowGravity = false;
+            gameScene.physics.add.collider(player1.characterSprite, npc[0].characterSprite, function(){player1.positionInteractMenu(npc[0])});
+
+            npcInfo = [''];
+            npcInfoFork = [''];
+            npc[1] = new NPC(gameScene.physics.add.image(5559, 3549, 'enemy1').setImmovable(true).setDepth(1), 180 * (3.14/180), npcInfo, npcInfoFork, gameScene, null, true, 50, 50, players, true, false, 0, 0,50);
+            npc[1].characterSprite.body.allowGravity = false;
+            gameScene.physics.add.collider(player1.characterSprite, npc[1].characterSprite, function(){player1.positionInteractMenu(npc[1])});
+
+            let playerColliders = [ player1.characterSprite ];
+            npc[0].enemies = playerColliders;
+            npc[1].enemies = playerColliders;
+            let enemies = [npc[0].characterSprite, npc[1].characterSprite];
+            player1.enemies = enemies;
         }
 
     }
@@ -309,7 +339,7 @@ function InitNPC(map){
 function clearNPCs(){
     for(let i = 0; i < npc.length; i++){
         if(npc[i] != null){
-            npc[i].destroy();
+            npc[i].Destruct();
             npc[i] = null;
         }
     }
@@ -319,7 +349,7 @@ function clearNPCs(){
 function update() {
     HandleMapCollisions();
     player1.Update(cursors);
-    console.log(player1.characterSprite.x + " " + player1.characterSprite.y);
+    //console.log(player1.characterSprite.x + " " + player1.characterSprite.y);
     for(let i = 0; i < npc.length; i++){
         if(npc[i] != null){
             npc[i].Update();

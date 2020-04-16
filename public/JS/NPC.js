@@ -72,8 +72,8 @@ class NPC{
 
         //Initialise UI
         this.ShopBackground = this.gameScene.add.image(385,200, 'shopbackground').setDepth(1).setScrollFactor(0);
-        this.ShopBackgroundCloseButton = this.gameScene.add.image(725,40, 'chatboxclosebutton', 1).setDepth(1).setScrollFactor(0).setInteractive();
-        this.ShopTitle = this.gameScene.add.text(300, 50, itemArray[0]).setDepth(1).setColor('#00000');
+        this.ShopBackgroundCloseButton = this.gameScene.add.image(733,24, 'chatboxclosebutton', 1).setDepth(1).setScrollFactor(0).setInteractive();
+        this.ShopTitle = this.gameScene.add.text(300, 31, itemArray[0]).setDepth(1).setColor('#00000');
         //Add shop items
         let xpos =  0, ypos = 0;
         for(let i = 1; i < itemArray.length -7; i+=8)
@@ -92,7 +92,7 @@ class NPC{
                 itemArray[i+7], (itemArray[i+7])/2);
 
             tempEquipment.inventorySprite.name =  itemArray[i];
-            tempEquipment.itemPriceText = this.gameScene.add.text(75 + (xpos * 200), 135 + (ypos * 100), itemArray[i+7]).setVisible(false).setColor('#000000').setDepth(3);
+            tempEquipment.itemPriceText = this.gameScene.add.text(75 - 16 + (xpos * 200), 140 + (ypos * 100), itemArray[i+7]).setVisible(false).setColor('#000000').setDepth(3);
             this.shopItems.push(tempEquipment);
 
         }
@@ -171,6 +171,8 @@ class NPC{
         if(vely != 0) this.characterSprite.setVelocityY(vely);
     }
     Update() {
+        console.log(this.health);
+
         for (let i = 0; i < this.projectiles.length; i++)
             if (this.projectiles[i] != null) {
                 this.projectiles[i].Update();

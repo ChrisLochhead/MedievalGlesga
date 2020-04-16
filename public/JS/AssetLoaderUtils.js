@@ -58,7 +58,7 @@ function LoadGameAssets(gameScene)
     gameScene.load.image('enemy1', "img/Enemy1.png")
 
     //Load shop info
-    gameScene.load.image('shopbackground', "img/ShopBox.png");
+    gameScene.load.image('shopbackground', "img/panel-shop.png");
     gameScene.load.text('shop1', "txt/Shop1.txt");
 
     //Load
