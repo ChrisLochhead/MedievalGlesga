@@ -1,0 +1,1 @@
+ASDA,health-potion,0,20,0,0,0,5,20,mana-potion,0,0,20,0,0,6,20
