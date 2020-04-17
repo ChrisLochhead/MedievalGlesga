@@ -46,10 +46,10 @@ class Weapon {
         if (self.parent.isAttacking && gameObject.parent.canBeDamaged == true) {
 
             //Apply damage
+            console.log(self.parent.owner.attackBonus);
             gameObject.parent.TakeDamage(self.parent.owner.attackBonus);
             if (gameObject.parent.health <= 0) {
-                self.parent.owner.money += gameObject.parent.cashDrop;
-                self.parent.owner.moneyText.text = "Cash: " + self.parent.owner.money;
+                self.parent.owner.UpdateUIMoney(gameObject.parent.cashDrop);
                 gameObject.parent.Destruct();
             } else {
                 gameObject.parent.isDamaged = true;
@@ -57,13 +57,15 @@ class Weapon {
             self.parent.isAttacking = false;
         }
     }
+
     Update()
     {
         if(this.isRangedAttacking && this.owner.mana >= 20 - this.owner.manaBonus)
         {
             this.rangedAttacks.push(new RangedAttack(this.gameScene.physics.add.sprite(this.bodySprite.x, this.bodySprite.y, this.rangeSprite), 30, this.owner.moveDirection, 100, 5, this.enemies, this.gameScene));
+
             let newM = this.owner.mana - (20 + this.owner.manaBonus);
-            this.owner.UpdateStats(this.owner.health, newM);
+            this.owner.mana = newM;
             this.isRangedAttacking = false;
         }
 

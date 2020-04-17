@@ -171,7 +171,7 @@ class NPC{
         if(vely != 0) this.characterSprite.setVelocityY(vely);
     }
     Update() {
-        console.log(this.health);
+        //console.log(this.health);
 
         for (let i = 0; i < this.projectiles.length; i++)
             if (this.projectiles[i] != null) {

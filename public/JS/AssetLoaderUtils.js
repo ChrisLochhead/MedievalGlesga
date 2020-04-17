@@ -53,13 +53,17 @@ function LoadGameAssets(gameScene)
     gameScene.load.image('second-helmet-body', "img/Default-Helmet-Body.png");
 
     //load NPCs
-    gameScene.load.image('npc', "img/NPC.png")
+    gameScene.load.image('npc', "img/NPC.png");
+    gameScene.load.image('npc2', "img/NPC2.png");
+    gameScene.load.image('npc3', "img/NPC3.png");
     gameScene.load.image('shopkeeper', "img/ShopKeeper.png");
-    gameScene.load.image('enemy1', "img/Enemy1.png")
+    gameScene.load.image('enemy1', "img/Enemy1.png");
+    gameScene.load.image('nicklaw', "img/Nicklaws.png");
 
     //Load shop info
     gameScene.load.image('shopbackground', "img/panel-shop.png");
     gameScene.load.text('shop1', "txt/Shop1.txt");
+    gameScene.load.text('shop2', "txt/Shop2.txt");
 
     //Load
     gameScene.load.image('fireball', "Img/FireBall.png");
@@ -76,6 +80,10 @@ function LoadPlayerAssets(gameScene)
     gameScene.load.image('gearbutton', "img/GearButton.png");
     gameScene.load.image('questtoggle', "img/desBtn-quests.png");
 
+    gameScene.load.image('player1Select', "img/desBtn_player1Select.png");
+    gameScene.load.image('player2Select', "img/desBtn_player2Select.png");
+    gameScene.load.image('player1Deselect', "img/desBtn_player1Deselect.png");
+    gameScene.load.image('player2Deselect', "img/desBtn_player2Deselect.png");
 
     //load chatbox and notifications
     gameScene.load.image('chatbox', "img/chatBox-Open.png");
@@ -87,11 +95,11 @@ function LoadPlayerAssets(gameScene)
 
     //load stat bars
     gameScene.load.image('status-bars', "img/HealthMana-Bars.png");
-    gameScene.load.image('health', "img/health.png");
-    gameScene.load.image('health-negative', "img/health-negative.png");
-    gameScene.load.image('mana', "img/mana.png");
-    gameScene.load.image('mana-negative', "img/mana-negative.png");
+    gameScene.load.image('health-bar', "img/Health-Bar.png");
+    gameScene.load.image('mana-bar', "img/Mana-Bar.png");
 
     //load our hero
     gameScene.load.image('gareth', 'img/Gareth.png');
+    gameScene.load.image('dave', 'img/David.png');
+    gameScene.load.image('gando', 'img/Gando.png');
 }
